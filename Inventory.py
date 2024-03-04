@@ -9,6 +9,12 @@ class invetnoryClass:
        self.root.config(bg="white")
        self.root.focus_force()
 
+
+       #====All Variables====
+       self.var_prd_id=StringVar()
+       self.var_prd_name=StringVar()
+       self.var_stk_quantity=StringVar()
+
        #====title====
        self.icon_title=PhotoImage(file="logo1.png")
        title=Label(self.root,text="RETAIL PRO",image=self.icon_title,compound=LEFT,font=("times new roman",40,"bold"),bg="#010c48",fg="white",anchor="w",padx=20).place(x=0,y=0,relwidth=1,height=70)
@@ -59,15 +65,20 @@ class invetnoryClass:
        scrollX = Scrollbar(inventory_frame, orient=HORIZONTAL)
 
        self.InventoryTable=ttk.Treeview(inventory_frame,
-                                        columns=("Product Id",
-                                                 "Product Name",
-                                                 "Stock Quantity",))
+                                        columns=("prd_id",
+                                                 "prd_name",
+                                                 "stk_quantity")
+                                        )
        scrollX.pack(side=BOTTOM,fill=X)
        scrolly.pack(side=RIGHT,fill=Y)
        scrollX.config(command=self.InventoryTable.xview)
        scrolly.config(command=self.InventoryTable.yview)
 
+       self.InventoryTable.heading("prd_id",text="Product Id")
+       self.InventoryTable.heading("prd_name",text="Product Name")
+       self.InventoryTable.heading("stk_quantity", text="Stock Quantity")
 
+       self.InventoryTable["show"]="headings"
        self.InventoryTable.pack(fill="both",
                                 expand=1
                                 )
