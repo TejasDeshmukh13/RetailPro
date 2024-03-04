@@ -25,13 +25,13 @@ class prdstatusClass:
        lbl_productid=Label(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=190,y=150,width=200)
 
        lbl_pname=Label(self.root,text="Product Name",font=("goudy old sty;e",15),bg="#ADD8E6").place(x=50,y=220)
-       txt_pname=Entry(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=190,y=220,width=200)
+       lbl_pname=Label(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=190,y=220,width=200)
     
        lbl_price=Label(self.root,text="Sales Price",font=("goudy old sty;e",15),bg="#ADD8E6").place(x=50,y=290)
-       txt_price=Entry(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=190,y=290,width=200)
+       lbl_price=Label(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=190,y=290,width=200)
 
        lbl_pprice=Label(self.root,text="Purchase Price",font=("goudy old sty;e",15),bg="#ADD8E6").place(x=50,y=370)
-       txt_pprice=Entry(self.root,textvariable=self.var_pprice,font=("goudy old sty;e",15),bg="lightyellow").place(x=190,y=370,width=200)
+       lbl_pprice=Label(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=190,y=370,width=200)
 
        lbl_value=Label(self.root,text="Stock value",font=("goudy old sty;e",15),bg="#ADD8E6").place(x=600,y=150)
        lbl_value=Label(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=750,y=150,width=200)
@@ -39,6 +39,8 @@ class prdstatusClass:
        lbl_qnty=Label(self.root,text="Stock Quantity",font=("goudy old sty;e",15),bg="#ADD8E6").place(x=600,y=220)
        lbl_qnty=Label(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=750,y=220,width=200)
 
+       lbl_alert=Label(self.root,text="Low Stock Alert",font=("goudy old sty;e",15),bg="#ADD8E6").place(x=600,y=290)
+       txt_alert=Entry(self.root,text="",font=("goudy old sty;e",15),bg="lightyellow").place(x=750,y=290,width=100)
 
 
 root=Tk()       

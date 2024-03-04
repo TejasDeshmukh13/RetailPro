@@ -13,7 +13,7 @@ class LoginPage:
         # ========================================================================
         # ============================background image============================
         # ========================================================================
-        self.bg_frame = Image.open('images\\background1.png')
+        self.bg_frame = Image.open(file='background1.png')
         photo = ImageTk.PhotoImage(self.bg_frame)
         self.bg_panel = Label(self.window, image=photo)
         self.bg_panel.image = photo
