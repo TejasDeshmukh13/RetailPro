@@ -7,7 +7,7 @@ from tkinter import Label, Tk
 class LoginPage:
     def __init__(self, window):
         self.window = window
-        self.window.geometry('1000x700')
+        self.window.geometry('1300x700')
         self.window.resizable(1, 1)
         
         self.window.title('Login Page')

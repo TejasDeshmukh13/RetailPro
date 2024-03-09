@@ -1,6 +1,7 @@
 from tkinter import*
 from PIL import Image,ImageTk
 from tkinter import ttk,messagebox
+import mysql.connector
 class customerClass:
     def __init__(self,root):
        self.root=root
@@ -8,6 +9,16 @@ class customerClass:
        self.root.title("RETAIL PRO")
        self.root.config(bg="white")
        self.root.focus_force()
+
+       self.db = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="D@zypiyu123",
+            database="retailers",
+            port=3306
+        )
+
+       self.cursor = self.db.cursor()
 
        #====title====
        self.icon_title=PhotoImage(file="logo1.png")
@@ -46,10 +57,10 @@ class customerClass:
        txt_sale=Entry(self.root,textvariable=self.var_sale,font=("goudy old sty;e",15),bg="lightyellow").place(x=850,y=220,width=180)
 
        #==================buttons============
-       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2").place(x=199,y=305,width=110,height=28)
+       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place(x=199,y=305,width=110,height=28)
        btn_update=Button(self.root,text="UPDATE",font=("goudy old style",15),bg="#4caf50",fg="white",cursor="hand2").place(x=399,y=305,width=110,height=28)
        btn_delete=Button(self.root,text="DELETE",font=("goudy old style",15),bg="#f44336",fg="white",cursor="hand2").place(x=599,y=305,width=110,height=28)
-       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2").place(x=799,y=305,width=110,height=28)
+       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=799,y=305,width=110,height=28)
        
        #====================Customer Details=================
 
@@ -64,7 +75,7 @@ class customerClass:
        scrolly.pack(side=RIGHT,fill=Y)
        scrollX.config(command=self.CustomerTable.xview)
        scrolly.config(command=self.CustomerTable.yview) 
-       self.CustomerTable.heading("Cid",text="Customer ID")
+       self.CustomerTable.heading("Cid",text="Product ID")
        self.CustomerTable.heading("Pname",text="Product Name")
        self.CustomerTable.heading("quantity",text="Product quantity")
        self.CustomerTable.heading("Cname",text="Customer Name")
@@ -72,13 +83,52 @@ class customerClass:
        self.CustomerTable.heading("Sale",text="Sale Price")
        self.CustomerTable["show"]="headings"
 
-      
+       self.update_treeview()
        
        
        self.CustomerTable.pack(fill=BOTH,expand=1)
+    def clear_data(self):
+        # Clearing text in entry widgets
+        self.var_cust_id.set("")
+        self.var_pname.set("")
+        self.var_quantity.set("")
+        self.var_cname.set("")
+        self.var_amount.set("")
+        self.var_sale.set("")
+    def save_data(self):
+        try:
+            # Fetching data from entry widgets
+            product_id = self.var_cust_id.get()
+            product_name = self.var_pname.get()
+            quantity = self.var_quantity.get()
+            cust_name = self.var_cname.get()
+            total_amount = self.var_amount.get()
+            sale_price = self.var_sale.get()
 
+            # Inserting data into the database
+            query = "INSERT INTO customer (product_id, product_name, product_quantity, cust_name, total_amount, sale_price) VALUES (%s, %s, %s, %s, %s, %s)"
+            values = (product_id, product_name, quantity, cust_name, total_amount, sale_price)
 
+            self.cursor.execute(query, values)
+            self.db.commit()
 
+            messagebox.showinfo("Success", "Data saved successfully!")
+            self.clear_data()
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Error: {str(e)}")
+    
+    def update_treeview(self):
+        
+
+    # Fetch data from the database
+        query = "SELECT * FROM customer"
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+
+    # Insert data into the Treeview
+        for row in data:
+          self.CustomerTable.insert("", "end", values=row)
 root=Tk()         
 obj=customerClass(root)
 root.mainloop()
