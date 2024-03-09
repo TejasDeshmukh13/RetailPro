@@ -58,8 +58,6 @@ class customerClass:
 
        #==================buttons============
        btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place(x=199,y=305,width=110,height=28)
-       btn_update=Button(self.root,text="UPDATE",font=("goudy old style",15),bg="#4caf50",fg="white",cursor="hand2").place(x=399,y=305,width=110,height=28)
-       btn_delete=Button(self.root,text="DELETE",font=("goudy old style",15),bg="#f44336",fg="white",cursor="hand2").place(x=599,y=305,width=110,height=28)
        btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=799,y=305,width=110,height=28)
        
        #====================Customer Details=================

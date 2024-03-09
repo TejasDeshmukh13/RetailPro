@@ -39,6 +39,7 @@ user.bind('<FocusOut>', on_leave)
 Frame(frame,width=295,height=2,bg='black').place(x=25,y=107)
 
 #########------------------
+
 def on_enter(e):
     code.delete(0,'end')
 
