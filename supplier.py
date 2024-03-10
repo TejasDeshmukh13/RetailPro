@@ -49,7 +49,7 @@ class supplierClass:
        lbl_search.place(x=300,y=450)
 
        txt_search=Entry(self.root,textvariable=self.var_searchtxt,font=("goundy old style",15),bg="lightyellow").place(x=500,y=450)
-       btn_search=Button(self.root,text="Search",command=self.var_searchtxt,font=("goudy old style",15),bg="#0f4d7d",fg="white").place(x=750,y=450,width=90)
+       btn_search=Button(self.root,text="Search",command=self.search_data,font=("goudy old style",15),bg="#0f4d7d",fg="white").place(x=750,y=450,width=90)
 
        #====title======
        title=Label(self.root,text="SUPPLIER DETAILS",font=("goudy old sty;e",15),bg="#0f4d7d",fg="white").place(x=50,y=100,width=1000)
@@ -164,7 +164,31 @@ class supplierClass:
             
         except Exception as e:
             messagebox.showerror("Error", f"Error: {str(e)}")
-      
+
+    def search_data(self):
+        try:
+            product_id = self.var_searchtxt.get()
+
+            # Fetching data from the database based on the entered product ID
+            query = "SELECT * FROM supplier WHERE product_id = %s"
+            self.cursor.execute(query, (product_id,))
+            data = self.cursor.fetchall()
+
+            # Clearing existing data in the treeview
+            for record in self.SupplierTable.get_children():
+                self.SupplierTable.delete(record)
+
+            if data:
+                for record in data:
+                    # Inserting each record into the treeview
+                    self.SupplierTable.insert("", "end", values=record)
+            else:
+                messagebox.showinfo("Not Found", f"No data found for Product ID: {product_id}")
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Error: {str(e)}")
+
+
 root=Tk()         
 obj=supplierClass(root)
 root.mainloop()
