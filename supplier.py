@@ -32,12 +32,13 @@ class supplierClass:
        self.var_ppid=StringVar()
        self.var_pname=StringVar()
        self.var_pprice=StringVar()
-       self.var_qntty=StringVar()
+       self.var_qntty=IntVar()
        self.var_salesp=StringVar()
        self.var_tprice=StringVar()
        self.var_searchtxt=StringVar()
        self.var_dropdown = StringVar()
-       self.var_alert = StringVar()
+       self.var_alert = IntVar()
+       self.var_stk_quantity=IntVar()
      
 
        
@@ -149,14 +150,26 @@ class supplierClass:
             ttpr=self.var_tprice.get()
             alrt=self.var_alert.get()
 
+
             
             dpd=self.var_dropdown .get()
+            stk_quantity=self.cursor.execute("SELECT stock_quantity FROM inventory")
+
+            stk_price=stk_quantity*salepr
+            stk_quantity+=qntty
 
             # Inserting data into the database
-            query = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, total_price, gst, low_stockalert) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s)"
-            values = (spname, mobino,prid, prname,pprice,qntty,salepr,ttpr,dpd,alrt)
+            query1 = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, total_price, gst, low_stockalert) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s)"
+            values1 = (spname, mobino,prid, prname,pprice,qntty,salepr,ttpr,dpd,alrt)
 
-            self.cursor.execute(query, values)
+            query2 = "INSERT INTO inventory (prod_id, prd_name,stk_price,purchase_per_unit, stock_quantity, sale_per_unit,GST, low_stk_alert) VALUES (%s,%s, %s, %s, %s, %s, %s,%s)"
+            values2 = (prid,prname,stk_price,pprice,stk_quantity,salepr,dpd,alrt)
+
+            self.cursor.execute(query1, values1)
+            self.db.commit()
+
+
+            self.cursor.execute(query2, values2)
             self.db.commit()
 
             messagebox.showinfo("Success", "Data saved successfully!")
