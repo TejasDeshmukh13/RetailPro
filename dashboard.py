@@ -1,11 +1,10 @@
 from tkinter import*
 from PIL import Image,ImageTk
-from customer import customerClass
-from supplier import supplierClass
-from Inventory import invetnoryClass
-class expentory:
+import subprocess
+class Expentory:
     def __init__(self,root):
        self.root=root
+
        self.root.geometry("1350x700+0+0")
        self.root.title("RETAIL PRO")
        self.root.config(bg="white")
@@ -25,30 +24,113 @@ class expentory:
        lbl_menuLogo.pack(side=TOP,fill=X)
 
        self.icon_side=PhotoImage(file="side.png")
-       lbl_menu=Label(LeftMenu,text="Menu",font=("times new roman",20),bg="#009688").pack(side=TOP,fill=X)
-       
-       btn_customer=Button(LeftMenu,text="Customer",command=self.customer,image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_supplier=Button(LeftMenu,text="Supplier",command=self.supplier,image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_Inventoryr=Button(LeftMenu,text="Inventory",command=self.inventory,image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_product=Button(LeftMenu,text="Product",image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_salesr=Button(LeftMenu,text="Sales",image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_exit=Button(LeftMenu,text="Exit",image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
+       lbl_menu = Label(LeftMenu, text="Menu", font=("times new roman", 20), bg="#009688")
+       lbl_menu.pack(side=TOP, fill=X)
+
+       btn_customer = Button(
+           LeftMenu,
+           text="Customer",
+           command=self.customer,
+           image=self.icon_side,
+           compound=LEFT,
+           padx=3,
+           anchor="w",
+           font=("times new roman", 20, "bold"),
+           bg="white",
+           bd=3,
+           cursor="hand2"
+       )
+       btn_customer.pack(side=TOP, fill=X)
+
+       btn_supplier = Button(
+           LeftMenu,
+           text="Supplier",
+           command=self.supplier,
+           image=self.icon_side,
+           compound=LEFT,
+           padx=3,
+           anchor="w",
+           font=("times new roman", 20, "bold"),
+           bg="white",
+           bd=3,
+           cursor="hand2"
+       )
+       btn_supplier.pack(side=TOP, fill=X)
+
+       btn_inventory = Button(
+           LeftMenu,
+           text="Inventory",
+           command=self.inventory,
+           image=self.icon_side,
+           compound=LEFT,
+           padx=3,
+           anchor="w",
+           font=("times new roman", 20, "bold"),
+           bg="white",
+           bd=3,
+           cursor="hand2"
+       )
+       btn_inventory.pack(side=TOP, fill=X)
+
+       btn_product = Button(
+           LeftMenu,
+           text="Product",
+           image=self.icon_side,
+           compound=LEFT,
+           padx=3,
+           anchor="w",
+           font=("times new roman", 20, "bold"),
+           bg="white",
+           bd=3,
+           cursor="hand2"
+       )
+       btn_product.pack(side=TOP, fill=X)
+
+       btn_sales = Button(
+           LeftMenu,
+           text="Sales",
+           image=self.icon_side,
+           compound=LEFT,
+           padx=3,
+           anchor="w",
+           font=("times new roman", 20, "bold"),
+           bg="white",
+           bd=3,
+           cursor="hand2"
+       )
+       btn_sales.pack(side=TOP, fill=X)
+
+       btn_exit = Button(
+           LeftMenu,
+           text="Exit",
+           image=self.icon_side,
+           compound=LEFT,
+           padx=3,
+           anchor="w",
+           font=("times new roman", 20, "bold"),
+           bg="white",
+           bd=3,
+           cursor="hand2"
+       )
+       btn_exit.pack(side=TOP, fill=X)
 #=====================================================================
 
     def customer(self):
-      self.new_win=Toplevel(self.root)
-      self.new_obj=customerClass(self.new_win)
+        self.root.destroy()
+        subprocess.run(['python', 'customer.py'])
 
       
     def supplier(self):
-      self.new_win=Toplevel(self.root)
-      self.new_obj=supplierClass(self.new_win)
+        self.root.destroy()
+        subprocess.run(['python', 'supplier.py'])
 
 
     def inventory(self):
-        self.new_win=Toplevel(self.root)
-        self.new_obj=invetnoryClass(self.new_win)
+        self.root.destroy()
+        subprocess.run(['python', 'inventory.py'])
 
-root=Tk()         
-obj=expentory(root)
-root.mainloop()
+
+if __name__ == "__main__":
+    root = Tk()
+    expentory_instance = Expentory(root)
+    root.mainloop()
