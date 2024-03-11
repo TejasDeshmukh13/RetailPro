@@ -2,10 +2,12 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import ttk, messagebox
 import mysql.connector
+import subprocess
 
 
 class loginClass:
     def __init__(self, root):
+        self.root = root
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -33,14 +35,16 @@ class loginClass:
 
             if result:
                 messagebox.showinfo("Success", "Login Successful!")
-                # Add your code here for successful login
+                self.dashboard()# Add your code here for successful login
             else:
                 messagebox.showerror("Error", "Invalid username or password.")
 
         except Exception as e:
             messagebox.showerror("Error", f"Error: {str(e)}")
 
-
+    def dashboard(self):
+        self.root.destroy()
+        subprocess.run(['python', 'dashboard.py'])
 root=Tk()
 root.title('login')
 root.geometry('925x500+300+200')
