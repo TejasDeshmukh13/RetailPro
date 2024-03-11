@@ -134,3 +134,4 @@ if __name__ == "__main__":
     root = Tk()
     expentory_instance = Expentory(root)
     root.mainloop()
+
