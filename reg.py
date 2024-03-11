@@ -2,10 +2,11 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import ttk, messagebox
 import mysql.connector
+import subprocess
 
-
-class RegClass:
+class regClass:
     def __init__(self, root):
+        self.root = root
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -39,11 +40,14 @@ class RegClass:
             self.db.commit()
 
             messagebox.showinfo("Success", "Signup done!")
-            self.clear_entries()
+            self.login()
 
         except Exception as e:
             messagebox.showerror("Error", f"Error: {str(e)}")
 
+    def login(self):
+        self.root.destroy()
+        subprocess.run(['python', 'login.py'])
     def clear_entries(self):
         user.delete(0, 'end')
         email.delete(0, 'end')
@@ -172,7 +176,7 @@ Frame(frame, width=295, height=2, bg='black').place(x=25, y=367)
 
 ####################------------------------------
 
-reg_instance = RegClass(window)  # Create an instance of the RegClass
+reg_instance = regClass(window)  # Create an instance of the RegClass
 
 Button(frame, width=39, pady=7, text='SIGN UP', bg='#57a1f8', fg='white', border=0,
        command=reg_instance.signup).place(x=35, y=400)
@@ -182,5 +186,7 @@ label.place(x=95, y=440)
 
 sign_in = Button(frame, width=6, text='Sign in', border=0, bg='white', cursor='hand2', fg='#57a1f8')
 sign_in.place(x=215, y=440)
+
+
 
 window.mainloop()
