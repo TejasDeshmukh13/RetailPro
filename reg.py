@@ -184,7 +184,10 @@ Button(frame, width=39, pady=7, text='SIGN UP', bg='#57a1f8', fg='white', border
 label = Label(frame, text="I have an account?", fg='black', bg='white', font=('Microsoft YaHei UI Light', 9))
 label.place(x=95, y=440)
 
-sign_in = Button(frame, width=6, text='Sign in', border=0, bg='white', cursor='hand2', fg='#57a1f8')
+def login():
+    window.destroy()
+    subprocess.run(['python', 'login.py'])
+sign_in = Button(frame, width=6, text='Sign in', border=0, bg='white', cursor='hand2', fg='#57a1f8',command=login)
 sign_in.place(x=215, y=440)
 
 

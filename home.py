@@ -30,7 +30,7 @@ class Home:
         title.place(x=950, y=10, relwidth=0.315, height=70)
 
         self.icon_side = PhotoImage(file="side.png")
-        btn_next = Button(text="Login", command=self.reg, image=self.icon_side, compound=LEFT, padx=3, anchor="w", font=("times new roman", 20, "bold"), bg="white", bd=3, cursor="hand2")
+        btn_next = Button(text="Click here to Login", command=self.reg, image=self.icon_side, compound=LEFT, padx=3, anchor="w", font=("times new roman", 20, "bold"), bg="white", bd=3, cursor="hand2")
         btn_next.pack(side=BOTTOM, fill=X)
 
     def reg(self):

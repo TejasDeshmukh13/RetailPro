@@ -110,9 +110,13 @@ login_instance = loginClass(root)
 Button(frame,width=39,pady=7,text='LOGIN',bg='#57a1f8',fg='white',border=0,command=login_instance.login).place(x=35,y=204)
 label=Label(frame,text="Don't have an account?",fg='black',bg='white',font=('Microsoft YaHei UI Light',9))
 label.place(x=75,y=270)
-
-sign_up= Button(frame,width=6,text='Sign up',border=0,bg='white',cursor='hand2',fg='#57a1f8')
+def reg():
+    root.destroy()
+    subprocess.run(['python', 'reg.py'])
+sign_up= Button(frame,width=6,text='Sign up',border=0,bg='white',cursor='hand2',fg='#57a1f8',command=reg)
 sign_up.place(x=215,y=270)
+
+
 
 
 
