@@ -2,6 +2,7 @@ from tkinter import*
 from PIL import Image,ImageTk
 from tkinter import ttk,messagebox
 import mysql.connector
+import subprocess
 class invetnoryClass:
     def __init__(self,root):
         self.root=root
@@ -13,7 +14,7 @@ class invetnoryClass:
         self.db = mysql.connector.connect(
             host = "localhost" ,
             user = "root" ,
-            password = "root" ,
+            password = "D@zypiyu123" ,
             database = "retailers" ,
             port = 3306
         )
@@ -27,6 +28,9 @@ class invetnoryClass:
         #====title====
         self.icon_title=PhotoImage(file="logo1.png")
         title=Label(self.root,text="RETAIL PRO",image=self.icon_title,compound=LEFT,font=("times new roman",40,"bold"),bg="#010c48",fg="white",anchor="w",padx=20).place(x=0,y=0,relwidth=1,height=70)
+        btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
+                          command=self.dashboard,
+                          cursor="hand2").place(x=1050, y=20, width=80, height=25)
 
         #====invetory====
         inventory_label = Label(self.root, text="INVENTORY DETAILS", font=("times new roman", 15), bg="#0f4d7d", fg="white").place(x=50, y=100, width=1000)
@@ -108,6 +112,9 @@ class invetnoryClass:
         result = self.cursor.fetchone()
         count = result[0] if result else "0"
         return count
+    def dashboard(self):
+        self.root.destroy()
+        subprocess.run(['python', 'dashboard.py'])
 root=Tk()
 obj=invetnoryClass(root)
 root.mainloop()

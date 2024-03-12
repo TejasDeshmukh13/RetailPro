@@ -2,6 +2,7 @@ from tkinter import*
 from PIL import Image,ImageTk
 from tkinter import ttk,messagebox
 import mysql.connector
+import subprocess
 class customerClass:
     def __init__(self,root):
        self.root=root
@@ -57,9 +58,12 @@ class customerClass:
        txt_sale=Entry(self.root,textvariable=self.var_sale,font=("goudy old sty;e",15),bg="lightyellow").place(x=850,y=220,width=180)
 
        #==================buttons============
-       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place(x=199,y=305,width=110,height=28)
-       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=799,y=305,width=110,height=28)
-       
+       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place(x=450,y=305,width=110,height=28)
+       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=580,y=305,width=110,height=28)
+       btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
+                         command=self.dashboard,
+                         cursor="hand2").place(x=1050, y=20, width=80, height=25)
+
        #====================Customer Details=================
 
        cust_frame=Frame(self.root,bd=3,relief=RIDGE)
@@ -127,6 +131,10 @@ class customerClass:
     # Insert data into the Treeview
         for row in data:
           self.CustomerTable.insert("", "end", values=row)
+
+    def dashboard(self):
+        self.root.destroy()
+        subprocess.run(['python', 'dashboard.py'])
 root=Tk()         
 obj=customerClass(root)
 root.mainloop()
