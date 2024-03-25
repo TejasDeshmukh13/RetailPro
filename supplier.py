@@ -34,15 +34,15 @@ class supplierClass:
         # ======================================
         # All Variables=======
         self.var_supp_name = StringVar()
-        self.var_mobile = StringVar()
-        self.var_ppid = StringVar()
+        self.var_mobile = IntVar()
+        self.var_ppid = IntVar()
         self.var_pname = StringVar()
-        self.var_pprice = StringVar()
+        self.var_pprice = IntVar()
         self.var_qntty = IntVar()
-        self.var_salesp = StringVar()
-        self.var_tprice = StringVar()
-        self.var_searchtxt = StringVar()
-        self.var_dropdown = StringVar()
+        self.var_salesp = IntVar()
+        self.var_tprice = IntVar()
+        self.var_searchtxt = IntVar()
+        self.var_dropdown = IntVar()
         self.var_alert = IntVar()
         self.var_stk_quantity = IntVar()
 
@@ -97,7 +97,7 @@ class supplierClass:
                            bg="lightyellow").place(x=550, y=300, width=180)
         txt_alert = Entry(self.root, textvariable=self.var_alert, font=("goudy old sty;e", 15), bg="lightyellow").place(
             x=850, y=300, width=100)
-        options = ["5%", "12%", "18%", "28%"]  # Replace with your desired options
+        options = ["5", "12", "18", "28"]  # Replace with your desired options
         dropdown = ttk.Combobox(self.root, textvariable=self.var_dropdown, values=options, font=("goudy old style", 15),
                                 background="lightyellow")
         dropdown.place(x=180, y=370, width=120)
@@ -167,17 +167,16 @@ class supplierClass:
             alrt = self.var_alert.get()
 
             dpd = self.var_dropdown.get()
-            stk_quantity = self.cursor.execute("SELECT stock_quantity FROM inventory")
+            stk_quantity = int(self.cursor.execute("SELECT stock_quantity FROM inventory"))
 
-            stk_price = stk_quantity * salepr
             stk_quantity += qntty
 
             # Inserting data into the database
             query1 = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, total_price, gst, low_stockalert) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s)"
             values1 = (spname, mobino, prid, prname, pprice, qntty, salepr, ttpr, dpd, alrt)
 
-            query2 = "INSERT INTO inventory (prod_id, prd_name,stk_price,purchase_per_unit, stock_quantity, sale_per_unit,GST, low_stk_alert) VALUES (%s,%s, %s, %s, %s, %s, %s,%s)"
-            values2 = (prid, prname, stk_price, pprice, stk_quantity, salepr, dpd, alrt)
+            query2 = "INSERT INTO inventory (prod_id, prd_name,stock_price,purchase_per_unit, stock_quantity, sale_per_unit,GST, low_stk_alert) VALUES (%s,%s, %s, %s, %s, %s, %s,%s)"
+            values2 = (prid, prname, stk_quantity * salepr, pprice, stk_quantity, salepr, dpd, alrt)
 
             self.cursor.execute(query1, values1)
             self.db.commit()
