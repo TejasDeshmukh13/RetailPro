@@ -167,16 +167,17 @@ class supplierClass:
             alrt = self.var_alert.get()
 
             dpd = self.var_dropdown.get()
-            stk_quantity = int(self.cursor.execute("SELECT stock_quantity FROM inventory"))
 
-            stk_quantity += qntty
+
 
             # Inserting data into the database
             query1 = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, total_price, gst, low_stockalert) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s)"
             values1 = (spname, mobino, prid, prname, pprice, qntty, salepr, ttpr, dpd, alrt)
 
-            query2 = "INSERT INTO inventory (prod_id, prd_name,stock_price,purchase_per_unit, stock_quantity, sale_per_unit,GST, low_stk_alert) VALUES (%s,%s, %s, %s, %s, %s, %s,%s)"
-            values2 = (prid, prname, stk_quantity * salepr, pprice, stk_quantity, salepr, dpd, alrt)
+            query2 = "INSERT INTO inventory (prod_id, prd_name,purchase_per_unit,sale_per_unit,stock_quantity,stock_price,GST, low_stk_alert) VALUES (%s,%s, %s, %s, %s, %s, %s,%s)"
+            values2 = (prid, prname, pprice, salepr, qntty, ttpr, dpd, alrt)
+
+
 
             self.cursor.execute(query1, values1)
             self.db.commit()
