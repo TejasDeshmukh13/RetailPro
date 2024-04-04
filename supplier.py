@@ -1,3 +1,4 @@
+from datetime import *
 from tkinter import*
 from PIL import Image,ImageTk #pip install pillow
 from tkinter import ttk,messagebox
@@ -16,7 +17,7 @@ class supplierClass:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="D@zypiyu123",
+            password="root",
             database="retailers",
             port=3306
         )
@@ -118,7 +119,7 @@ class supplierClass:
         scrollX = Scrollbar(supp_frame, orient=HORIZONTAL)
 
         self.SupplierTable = ttk.Treeview(supp_frame, column=(
-        "sname", "smobile", "ppid", "pname", "pprice", "qnty", "sprice", "gst", "tprice"), yscrollcommand=scrolly.set,
+            "sname", "smobile", "ppid", "pname", "pprice", "qnty", "sprice", "gst", "tprice"), yscrollcommand=scrolly.set,
                                           xscrollcommand=scrollX.set)
         scrollX.pack(side=BOTTOM, fill=X)
         scrolly.pack(side=RIGHT, fill=Y)
@@ -136,6 +137,10 @@ class supplierClass:
 
         self.SupplierTable["show"] = "headings"
         self.SupplierTable.pack(fill=BOTH, expand=1)
+
+        # Call update_treeview to retrieve data from the table
+        self.update_treeview()
+
 
     def clear_data(self):
         # Clearing text in entry widgets
@@ -167,12 +172,10 @@ class supplierClass:
             alrt = self.var_alert.get()
 
             dpd = self.var_dropdown.get()
-
-
-
+            purchase_month = datetime.now()
             # Inserting data into the database
-            query1 = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, total_price, gst, low_stockalert) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s)"
-            values1 = (spname, mobino, prid, prname, pprice, qntty, salepr, ttpr, dpd, alrt)
+            query1 = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, total_price, gst, low_stockalert, purchase_month) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s)"
+            values1 = (spname , mobino , prid , prname , pprice , qntty , salepr , ttpr , dpd , alrt , datetime.now().month)
 
             query2 = "INSERT INTO inventory (prod_id, prd_name,purchase_per_unit,sale_per_unit,stock_quantity,stock_price,GST, low_stk_alert) VALUES (%s,%s, %s, %s, %s, %s, %s,%s)"
             values2 = (prid, prname, pprice, salepr, qntty, ttpr, dpd, alrt)
@@ -188,8 +191,35 @@ class supplierClass:
             messagebox.showinfo("Success", "Data saved successfully!")
             self.clear_data()
 
+            # Update the treeview after a delay of 1000 milliseconds (1 second)
+            self.root.after(1000 , self.update_treeview)
         except Exception as e:
             messagebox.showerror("Error", f"Error: {str(e)}")
+
+    def update_treeview(self) :
+        try :
+            # Fetch data from the database
+            query = "SELECT * FROM supplier"
+            self.cursor.execute(query)
+            data = self.cursor.fetchall()
+
+            # Clear existing data in the treeview
+            for record in self.SupplierTable.get_children() :
+                self.SupplierTable.delete(record)
+
+            # Insert data into the Treeview
+            for row in data :
+                self.SupplierTable.insert("" , "end" , values = row)
+
+        except Exception as e :
+            messagebox.showerror("Error" , f"Error: {str(e)}")
+
+    def get_month_abbreviation(self , month_number) :
+        month_abbr = {
+            1 : 'Jan' , 2 : 'Feb' , 3 : 'Mar' , 4 : 'Apr' , 5 : 'May' , 6 : 'Jun' ,
+            7 : 'Jul' , 8 : 'Aug' , 9 : 'Sep' , 10 : 'Oct' , 11 : 'Nov' , 12 : 'Dec'
+        }
+        return month_abbr.get(month_number , '')
 
     def search_data(self):
         try:

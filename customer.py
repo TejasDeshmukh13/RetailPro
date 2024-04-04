@@ -3,6 +3,9 @@ from PIL import Image,ImageTk
 from tkinter import ttk,messagebox
 import mysql.connector
 import subprocess
+from datetime import *
+
+
 class customerClass:
     def __init__(self,root):
        self.root=root
@@ -14,7 +17,7 @@ class customerClass:
        self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="D@zypiyu123",
+            password="root",
             database="retailers",
             port=3306
         )
@@ -97,8 +100,9 @@ class customerClass:
         self.var_cname.set("")
         self.var_amount.set("")
         self.var_sale.set("")
-    def save_data(self):
-        try:
+
+    def save_data(self) :
+        try :
             # Fetching data from entry widgets
             product_id = self.var_cust_id.get()
             product_name = self.var_pname.get()
@@ -107,22 +111,21 @@ class customerClass:
             total_amount = self.var_amount.get()
             sale_price = self.var_sale.get()
 
-            # Inserting data into the database
-            query = "INSERT INTO customer (product_id, product_name, product_quantity, cust_name, total_amount, sale_price) VALUES (%s, %s, %s, %s, %s, %s)"
-            values = (product_id, product_name, quantity, cust_name, total_amount, sale_price)
 
-            self.cursor.execute(query, values)
+            # Inserting data into the database
+            query = "INSERT INTO customer (product_id, product_name, product_quantity, cust_name, total_amount, sale_price, sale_month) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            values = (product_id , product_name , quantity , cust_name , total_amount , sale_price , datetime.now().month)
+
+            self.cursor.execute(query , values)
             self.db.commit()
 
-            messagebox.showinfo("Success", "Data saved successfully!")
+            messagebox.showinfo("Success" , "Data saved successfully!")
             self.clear_data()
-            
-        except Exception as e:
-            messagebox.showerror("Error", f"Error: {str(e)}")
-    
-    def update_treeview(self):
-        
+        except Exception as e :
+            messagebox.showerror("Error" , f"Error: {str(e)}")
 
+
+    def update_treeview(self):
     # Fetch data from the database
         query = "SELECT * FROM customer"
         self.cursor.execute(query)
@@ -131,6 +134,14 @@ class customerClass:
     # Insert data into the Treeview
         for row in data:
           self.CustomerTable.insert("", "end", values=row)
+
+    def get_month_abbreviation(self , month_number) :
+        month_abbr = {
+            1 : 'Jan' , 2 : 'Feb' , 3 : 'Mar' , 4 : 'Apr' , 5 : 'May' , 6 : 'Jun' ,
+            7 : 'Jul' , 8 : 'Aug' , 9 : 'Sep' , 10 : 'Oct' , 11 : 'Nov' , 12 : 'Dec'
+        }
+        return month_abbr.get(month_number , '')
+
 
     def dashboard(self):
         self.root.destroy()
