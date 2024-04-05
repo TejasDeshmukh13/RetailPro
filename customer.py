@@ -66,6 +66,8 @@ class customerClass:
        btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
                          command=self.dashboard,
                          cursor="hand2").place(x=1050, y=20, width=80, height=25)
+       btn_check = Button(self.root, text = "check" , font = ("goudy old style" , 10) , bg = "blue" , fg = "white" ,
+                        cursor = "hand2",command = self.search_data).place(x = 150 , y = 185 , width = 80 , height = 25)
 
        #====================Customer Details=================
 
@@ -141,6 +143,36 @@ class customerClass:
             7 : 'Jul' , 8 : 'Aug' , 9 : 'Sep' , 10 : 'Oct' , 11 : 'Nov' , 12 : 'Dec'
         }
         return month_abbr.get(month_number , '')
+    def search_data(self):
+        try:
+            product_id = self.var_cust_id.get()
+
+            # Fetching data from the database based on the entered product ID
+            query = "SELECT * FROM inventory WHERE prod_id = %s"
+            self.cursor.execute(query, (product_id,))
+            data = self.cursor.fetchone()
+
+            # Clearing existing data in the treeview
+
+            if self.cursor.execute("SELECT * FROM inventory WHERE prod_id=%s",params = (product_id,)):
+                messagebox.showinfo("Found" , f"data found for Product ID: {product_id}")
+                for record in data :
+
+                    self.cursor.execute("SELECT * FROM inventory WHERE prod_name = %s AND sale_per_unit = %s" ,
+                                        (pname , sale_per_unit))
+                    result = self.cursor.fetchone()
+
+                    if result :
+                        # Assuming you want to set the retrieved values in the text fields
+                        self.var_pname.set(result['prd_name'])
+                        self.var_sale.set(result['sale_per_unit'])
+                    else :
+                        messagebox.showinfo("Not Found" , f"No data found for Product ID: {product_id}")
+
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Error: {str(e)}")
+
 
 
     def dashboard(self):

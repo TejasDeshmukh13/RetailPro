@@ -1,3 +1,4 @@
+import subprocess
 from tkinter import *
 from PIL import Image, ImageTk
 import mysql.connector
@@ -33,6 +34,9 @@ class SalesClass(Tk):
 
         title = Label(self, text="SALES DETAILS", font=("goudy old style", 15), bg="#0f4d7d",
                       fg="white").place(x=0, y=100, width=1150)
+        btn_back = Button(self , text = "BACK" , font = ("goudy old style" , 10) , bg = "blue" , fg = "white" ,
+                          command = self.dashboard ,
+                          cursor = "hand2").place(x = 1050 , y = 20 , width = 80 , height = 25)
 
         self.figure_purchase = Figure(figsize=(6, 4), dpi=100)
         self.axes_purchase = self.figure_purchase.add_subplot(111)
@@ -45,12 +49,8 @@ class SalesClass(Tk):
 
         self.figure_canvas_sales = FigureCanvasTkAgg(self.figure_sales, self)
         self.figure_canvas_sales.get_tk_widget().place(x=600, y=140)
-
-        self.load_button = Button(self, text='Load Graph', command=self.load_data)
-        self.load_button.place(relx=0.5, rely=0.93, anchor="s")
-
         NavigationToolbar2Tk(self.figure_canvas_purchase, self)
-
+        self.load_data()
     def load_data(self) :
         query_purchase = "SELECT `total_price`, `purchase_month` FROM `supplier`"
         query_sales = "SELECT `total_amount`, `sale_month` FROM `customer`"
@@ -92,5 +92,8 @@ class SalesClass(Tk):
         self.figure_canvas_purchase.draw()
         self.figure_canvas_sales.draw()
 
+    def dashboard(self):
+        self.destroy()
+        subprocess.run(['python', 'dashboard.py'])
 root = SalesClass()
 root.mainloop()

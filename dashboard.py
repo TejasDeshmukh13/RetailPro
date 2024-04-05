@@ -89,6 +89,7 @@ class Expentory:
 			Menu,
 			text="Sales",
 			image=self.icon_side,
+			command=self.sales,
 			compound=LEFT,
 			padx=3,
 			anchor="w",
@@ -129,7 +130,9 @@ class Expentory:
 		self.root.destroy()
 		subprocess.run(['python', 'inventory.py'])
 
-
+	def sales(self):
+		self.root.destroy()
+		subprocess.run(['python' , 'sales.py'])
 root = Tk()
 obj = Expentory(root)
 
