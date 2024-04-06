@@ -2,6 +2,10 @@ from tkinter import*
 from PIL import Image,ImageTk
 from tkinter import ttk,messagebox
 import mysql.connector
+import subprocess
+from datetime import *
+
+
 class customerClass:
     def __init__(self,root):
        self.root=root
@@ -57,9 +61,14 @@ class customerClass:
        txt_sale=Entry(self.root,textvariable=self.var_sale,font=("goudy old sty;e",15),bg="lightyellow").place(x=850,y=220,width=180)
 
        #==================buttons============
-       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place(x=199,y=305,width=110,height=28)
-       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=799,y=305,width=110,height=28)
-       
+       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place(x=450,y=305,width=110,height=28)
+       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=580,y=305,width=110,height=28)
+       btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
+                         command=self.dashboard,
+                         cursor="hand2").place(x=1050, y=20, width=80, height=25)
+       btn_check = Button(self.root, text = "check" , font = ("goudy old style" , 10) , bg = "blue" , fg = "white" ,
+                        cursor = "hand2",command = self.search_data).place(x = 150 , y = 185 , width = 80 , height = 25)
+
        #====================Customer Details=================
 
        cust_frame=Frame(self.root,bd=3,relief=RIDGE)
@@ -93,8 +102,9 @@ class customerClass:
         self.var_cname.set("")
         self.var_amount.set("")
         self.var_sale.set("")
-    def save_data(self):
-        try:
+
+    def save_data(self) :
+        try :
             # Fetching data from entry widgets
             product_id = self.var_cust_id.get()
             product_name = self.var_pname.get()
@@ -103,22 +113,21 @@ class customerClass:
             total_amount = self.var_amount.get()
             sale_price = self.var_sale.get()
 
-            # Inserting data into the database
-            query = "INSERT INTO customer (product_id, product_name, product_quantity, cust_name, total_amount, sale_price) VALUES (%s, %s, %s, %s, %s, %s)"
-            values = (product_id, product_name, quantity, cust_name, total_amount, sale_price)
 
-            self.cursor.execute(query, values)
+            # Inserting data into the database
+            query = "INSERT INTO customer (product_id, product_name, product_quantity, cust_name, total_amount, sale_price, sale_month) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            values = (product_id , product_name , quantity , cust_name , total_amount , sale_price , datetime.now().month)
+
+            self.cursor.execute(query , values)
             self.db.commit()
 
-            messagebox.showinfo("Success", "Data saved successfully!")
+            messagebox.showinfo("Success" , "Data saved successfully!")
             self.clear_data()
-            
-        except Exception as e:
-            messagebox.showerror("Error", f"Error: {str(e)}")
-    
-    def update_treeview(self):
-        
+        except Exception as e :
+            messagebox.showerror("Error" , f"Error: {str(e)}")
 
+
+    def update_treeview(self):
     # Fetch data from the database
         query = "SELECT * FROM customer"
         self.cursor.execute(query)
@@ -127,6 +136,43 @@ class customerClass:
     # Insert data into the Treeview
         for row in data:
           self.CustomerTable.insert("", "end", values=row)
+
+    def get_month_abbreviation(self , month_number) :
+        month_abbr = {
+            1 : 'Jan' , 2 : 'Feb' , 3 : 'Mar' , 4 : 'Apr' , 5 : 'May' , 6 : 'Jun' ,
+            7 : 'Jul' , 8 : 'Aug' , 9 : 'Sep' , 10 : 'Oct' , 11 : 'Nov' , 12 : 'Dec'
+        }
+        return month_abbr.get(month_number , '')
+
+    def search_data(self):
+        try:
+            product_id = self.var_cust_id.get()
+
+            # Fetching data from the database based on the entered product ID
+            query = "SELECT prd_name, sale_per_unit FROM inventory WHERE prod_id = %s"
+            self.cursor.execute(query, (product_id,))
+            data = self.cursor.fetchone()
+
+            if data:
+                messagebox.showinfo("Found", f"Data found for Product ID: {product_id}")
+                # Data found for the product ID
+                product_name, sale_price = data
+
+                # Update the corresponding text fields with the retrieved data
+                self.var_pname.set(product_name)
+                self.var_sale.set(sale_price)
+
+
+            else:
+                # No data found for the product ID
+                messagebox.showinfo("Not Found", f"No data found for Product ID: {product_id}")
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Error: {str(e)}")
+
+    def dashboard(self):
+        self.root.destroy()
+        subprocess.run(['python', 'dashboard.py'])
 root=Tk()         
 obj=customerClass(root)
 root.mainloop()
