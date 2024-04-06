@@ -1,54 +1,145 @@
-from tkinter import*
-from PIL import Image,ImageTk
-from customer import customerClass
-from supplier import supplierClass
-from Inventory import invetnoryClass
-class expentory:
-    def __init__(self,root):
-       self.root=root
-       self.root.geometry("1350x700+0+0")
-       self.root.title("RETAIL PRO")
-       self.root.config(bg="white")
-       #====title====
-       self.icon_title=PhotoImage(file="logo1.png")
-       title=Label(self.root,text="RETAIL PRO",image=self.icon_title,compound=LEFT,font=("times new roman",40,"bold"),bg="#010c48",fg="white",anchor="w",padx=20).place(x=0,y=0,relwidth=1,height=70)
+from tkinter import *
+from PIL import Image, ImageTk
+import subprocess
 
-       #======left Menu===
-       self.MenuLogo=Image.open("menu_im.png")
-       self.MenuLogo=self.MenuLogo.resize((300,200),Image.AFFINE)
-       self.MenuLogo=ImageTk.PhotoImage(self.MenuLogo)
 
-       LeftMenu=Frame(self.root,bd=2,relief=RIDGE,bg="white")
-       LeftMenu.place(x=0,y=102,width=320,height=565)
+class Expentory:
+    def __init__(self, root):
+        self.root = root
 
-       lbl_menuLogo=Label(LeftMenu,image=self.MenuLogo)
-       lbl_menuLogo.pack(side=TOP,fill=X)
+        self.root.geometry("1350x700+0+0")
+        self.root.title("RETAIL PRO")
+        self.root.config(bg="white")
+        # ====title====
+        self.icon_title = PhotoImage(file="logo1.png")
+        title = Label(self.root, text="RETAIL PRO", image=self.icon_title, compound=LEFT,
+                      font=("times new roman", 40, "bold"), bg="#010c48", fg="white", anchor="w", padx=20).place(x=0,
+                                                                                                                 y=0,
+                                                                                                                 relwidth=1,
+                                                                                                                 height=70)
 
-       self.icon_side=PhotoImage(file="side.png")
-       lbl_menu=Label(LeftMenu,text="Menu",font=("times new roman",20),bg="#009688").pack(side=TOP,fill=X)
-       
-       btn_customer=Button(LeftMenu,text="Customer",command=self.customer,image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_supplier=Button(LeftMenu,text="Supplier",command=self.supplier,image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_Inventoryr=Button(LeftMenu,text="Inventory",command=self.inventory,image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_product=Button(LeftMenu,text="Product",image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_salesr=Button(LeftMenu,text="Sales",image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-       btn_exit=Button(LeftMenu,text="Exit",image=self.icon_side,compound=LEFT,padx=3,anchor="w",font=("times new roman",20,"bold"),bg="white",bd=3,cursor="hand2").pack(side=TOP,fill=X)
-#=====================================================================
+        # ======left Menu===
+        self.MenuLogo = Image.open("menu_im.png")
+        self.MenuLogo = self.MenuLogo.resize((1200, 700))
+        self.MenuLogo = ImageTk.PhotoImage(self.MenuLogo)
+
+        Menu = Frame(self.root, bd=2, relief=RIDGE, bg="white")
+        Menu.place(x=5, y=70, width=1500, height=660)
+
+        lbl_menuLogo = Label(Menu, image=self.MenuLogo)
+        lbl_menuLogo.pack(side=TOP, fill=X)
+
+        self.icon_side = PhotoImage(file="side.png")
+        lbl_menu = Label(Menu, text="MENU", font=("times new roman", 40, 'bold')).place(x=50, y=40)
+
+        Menu = Frame(self.root, bd=2, relief=RIDGE, bg="gray")
+        Menu.place(x=30, y=180, width=220, height=490)
+
+        btn_customer = Button(
+            Menu,
+            text="Customer",
+            command=self.customer,
+            image=self.icon_side,
+            compound=LEFT,
+            padx=3,
+            anchor="w",
+            font=("times new roman", 20, "bold"),
+            bg="light gray",
+            bd=5,
+            cursor="hand1"
+        ).place(x=20, y=30)
+        Button(width=7, pady=0, text='Settings', bg='light blue', fg='black', border=3,
+               font=("times new roman", 15, "bold"),
+               ).place(x=1240, y=20)
+        Button(width=7, pady=0, text='About Us', bg='light blue', fg='black', border=3,
+               font=("times new roman", 15, "bold"),
+               ).place(x=1135, y=20)
+
+        btn_supplier = Button(
+            Menu,
+            text="Supplier",
+            command=self.supplier,
+            image=self.icon_side,
+            compound=LEFT,
+            padx=3,
+            anchor="w",
+            font=("times new roman", 20, "bold"),
+            bg="light gray",
+            bd=5,
+            cursor="hand1"
+        ).place(x=25, y=110)
+
+        btn_inventory = Button(
+            Menu,
+            text="Inventory",
+            command=self.inventory,
+            image=self.icon_side,
+            compound=LEFT,
+            padx=3,
+            anchor="w",
+            font=("times new roman", 20, "bold"),
+            bg="light gray",
+            bd=5,
+            cursor="hand2"
+        ).place(x=20, y=190)
+
+        btn_product = Button(
+            Menu,
+            text="Product",
+            image=self.icon_side,
+            compound=LEFT,
+            padx=3,
+            anchor="w",
+            font=("times new roman", 20, "bold"),
+            bg="light gray",
+            bd=5,
+            cursor="hand2"
+        ).place(x=30, y=265)
+
+        btn_sales = Button(
+            Menu,
+            text="Sales",
+            image=self.icon_side,
+            compound=LEFT,
+            padx=3,
+            anchor="w",
+            font=("times new roman", 20, "bold"),
+            bg="light gray",
+            bd=3,
+            cursor="hand2"
+        ).place(x=45, y=340)
+
+        btn_exit = Button(
+            Menu,
+            text="Exit",
+            image=self.icon_side,
+            compound=LEFT,
+            padx=3,
+            anchor="w",
+            font=("times new roman", 20, "bold"),
+            bg="light gray",
+            bd=5,
+            cursor="hand2"
+        ).place(x=45, y=410)
+
+    # =====================================================================
 
     def customer(self):
-      self.new_win=Toplevel(self.root)
-      self.new_obj=customerClass(self.new_win)
+        self.root.destroy()
+        subprocess.run(['python', 'customer.py'])
 
-      
     def supplier(self):
-      self.new_win=Toplevel(self.root)
-      self.new_obj=supplierClass(self.new_win)
-
+        self.root.destroy()
+        subprocess.run(['python', 'supplier.py'])
 
     def inventory(self):
-        self.new_win=Toplevel(self.root)
-        self.new_obj=invetnoryClass(self.new_win)
+        self.root.destroy()
+        subprocess.run(['python', 'inventory.py'])
 
+
+
+    
 root=Tk()         
-obj=expentory(root)
+obj=Expentory(root)
+
 root.mainloop()
