@@ -1,0 +1,732 @@
+Index: customer.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from tkinter import*\r\nfrom PIL import Image,ImageTk\r\nfrom tkinter import ttk,messagebox\r\nimport mysql.connector\r\nimport subprocess\r\nfrom datetime import *\r\n\r\n\r\nclass customerClass:\r\n    def __init__(self,root):\r\n       self.root=root\r\n       self.root.geometry(\"1150x600+220+130\")\r\n       self.root.title(\"RETAIL PRO\")\r\n       self.root.config(bg=\"white\")\r\n       self.root.focus_force()\r\n\r\n       self.db = mysql.connector.connect(\r\n            host=\"localhost\",\r\n            user=\"root\",\r\n            password=\"D@zypiyu123\",\r\n            database=\"retailers\",\r\n            port=3306\r\n        )\r\n\r\n       self.cursor = self.db.cursor()\r\n\r\n       #====title====\r\n       self.icon_title=PhotoImage(file=\"logo1.png\")\r\n       title=Label(self.root,text=\"RETAIL PRO\",image=self.icon_title,compound=LEFT,font=(\"times new roman\",40,\"bold\"),bg=\"#010c48\",fg=\"white\",anchor=\"w\",padx=20).place(x=0,y=0,relwidth=1,height=70)\r\n\r\n       #======================================\r\n       # All Variables=======\r\n       self.var_cust_id=StringVar()\r\n       self.var_pname=StringVar()\r\n       self.var_quantity=StringVar()\r\n       self.var_cname=StringVar()\r\n       self.var_amount=StringVar()\r\n       self.var_sale=StringVar()\r\n       \r\n\r\n       #====title======\r\n       title=Label(self.root,text=\"CUSTOMER DETAILS\",font=(\"goudy old sty;e\",15),bg=\"#0f4d7d\",fg=\"white\").place(x=50,y=100,width=1000)\r\n\r\n       #=======content=========\r\n       #=========row1==========\r\n       lbl_custide=Label(self.root,text=\"Product ID\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=50,y=150)\r\n       lbl_pname=Label(self.root,text=\"Product Name\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=350,y=150)\r\n       lbl_quantity=Label(self.root,text=\"Product quantity\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=700,y=150)\r\n\r\n       txt_custide=Entry(self.root,textvariable=self.var_cust_id,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=150,y=150,width=180)\r\n       txt_pname=Entry(self.root,textvariable=self.var_pname,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=500,y=150,width=180)\r\n       txt_quantity=Entry(self.root,textvariable=self.var_quantity,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=850,y=150,width=180)\r\n\r\n         #=========row2==========\r\n       lbl_cname=Label(self.root,text=\"Cust Name\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=50,y=220)\r\n       lbl_amount=Label(self.root,text=\"Total Amount\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=350,y=220)\r\n       lbl_sale=Label(self.root,text=\"Sale Price \",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=700,y=220)\r\n\r\n       txt_cname=Entry(self.root,textvariable=self.var_cname,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=150,y=220,width=180)\r\n       txt_amount=Entry(self.root,textvariable=self.var_amount,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=500,y=220,width=180)\r\n       txt_sale=Entry(self.root,textvariable=self.var_sale,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=850,y=220,width=180)\r\n\r\n       #==================buttons============\r\n       btn_add=Button(self.root,text=\"SAVE\",font=(\"goudy old style\",15),bg=\"#2196f3\",fg=\"white\",cursor=\"hand2\",command=self.save_data).place(x=450,y=305,width=110,height=28)\r\n       btn_clear=Button(self.root,text=\"CLEAR\",font=(\"goudy old style\",15),bg=\"#607d8b\",fg=\"white\",cursor=\"hand2\",command=self.clear_data).place(x=580,y=305,width=110,height=28)\r\n       btn_back = Button(self.root, text=\"BACK\", font=(\"goudy old style\", 10), bg=\"blue\", fg=\"white\",\r\n                         command=self.dashboard,\r\n                         cursor=\"hand2\").place(x=1050, y=20, width=80, height=25)\r\n       btn_check = Button(self.root, text = \"check\" , font = (\"goudy old style\" , 10) , bg = \"blue\" , fg = \"white\" ,\r\n                        cursor = \"hand2\",command = self.search_data).place(x = 150 , y = 185 , width = 80 , height = 25)\r\n\r\n       #====================Customer Details=================\r\n\r\n       cust_frame=Frame(self.root,bd=3,relief=RIDGE)\r\n       cust_frame.place(x=0,y=350,relwidth=1,height=250)\r\n\r\n       scrolly=Scrollbar(cust_frame,orient=VERTICAL)\r\n       scrollX=Scrollbar(cust_frame,orient=HORIZONTAL)\r\n\r\n       self.CustomerTable=ttk.Treeview(cust_frame,column=(\"Cid\",\"Pname\",\"quantity\",\"Cname\",\"Amount\",\"Sale\"),yscrollcommand=scrolly.set,xscrollcommand=scrollX.set)       \r\n       scrollX.pack(side=BOTTOM,fill=X)\r\n       scrolly.pack(side=RIGHT,fill=Y)\r\n       scrollX.config(command=self.CustomerTable.xview)\r\n       scrolly.config(command=self.CustomerTable.yview) \r\n       self.CustomerTable.heading(\"Cid\",text=\"Product ID\")\r\n       self.CustomerTable.heading(\"Pname\",text=\"Product Name\")\r\n       self.CustomerTable.heading(\"quantity\",text=\"Product quantity\")\r\n       self.CustomerTable.heading(\"Cname\",text=\"Customer Name\")\r\n       self.CustomerTable.heading(\"Amount\",text=\"Total Amount\")\r\n       self.CustomerTable.heading(\"Sale\",text=\"Sale Price\")\r\n       self.CustomerTable[\"show\"]=\"headings\"\r\n\r\n       self.update_treeview()\r\n       \r\n       \r\n       self.CustomerTable.pack(fill=BOTH,expand=1)\r\n    def clear_data(self):\r\n        # Clearing text in entry widgets\r\n        self.var_cust_id.set(\"\")\r\n        self.var_pname.set(\"\")\r\n        self.var_quantity.set(\"\")\r\n        self.var_cname.set(\"\")\r\n        self.var_amount.set(\"\")\r\n        self.var_sale.set(\"\")\r\n\r\n    def save_data(self) :\r\n        try :\r\n            # Fetching data from entry widgets\r\n            product_id = self.var_cust_id.get()\r\n            product_name = self.var_pname.get()\r\n            quantity = self.var_quantity.get()\r\n            cust_name = self.var_cname.get()\r\n            total_amount = self.var_amount.get()\r\n            sale_price = self.var_sale.get()\r\n\r\n\r\n            # Inserting data into the database\r\n            query = \"INSERT INTO customer (product_id, product_name, product_quantity, cust_name, total_amount, sale_price, sale_month) VALUES (%s, %s, %s, %s, %s, %s, %s)\"\r\n            values = (product_id , product_name , quantity , cust_name , total_amount , sale_price , datetime.now().month)\r\n\r\n            self.cursor.execute(query , values)\r\n            self.db.commit()\r\n\r\n            messagebox.showinfo(\"Success\" , \"Data saved successfully!\")\r\n            self.clear_data()\r\n        except Exception as e :\r\n            messagebox.showerror(\"Error\" , f\"Error: {str(e)}\")\r\n\r\n\r\n    def update_treeview(self):\r\n    # Fetch data from the database\r\n        query = \"SELECT * FROM customer\"\r\n        self.cursor.execute(query)\r\n        data = self.cursor.fetchall()\r\n\r\n    # Insert data into the Treeview\r\n        for row in data:\r\n          self.CustomerTable.insert(\"\", \"end\", values=row)\r\n\r\n    def get_month_abbreviation(self , month_number) :\r\n        month_abbr = {\r\n            1 : 'Jan' , 2 : 'Feb' , 3 : 'Mar' , 4 : 'Apr' , 5 : 'May' , 6 : 'Jun' ,\r\n            7 : 'Jul' , 8 : 'Aug' , 9 : 'Sep' , 10 : 'Oct' , 11 : 'Nov' , 12 : 'Dec'\r\n        }\r\n        return month_abbr.get(month_number , '')\r\n\r\n    def search_data(self):\r\n        try:\r\n            product_id = self.var_cust_id.get()\r\n\r\n            # Fetching data from the database based on the entered product ID\r\n            query = \"SELECT prd_name, sale_per_unit FROM inventory WHERE prod_id = %s\"\r\n            self.cursor.execute(query, (product_id,))\r\n            data = self.cursor.fetchone()\r\n\r\n            if data:\r\n                messagebox.showinfo(\"Found\", f\"Data found for Product ID: {product_id}\")\r\n                # Data found for the product ID\r\n                product_name, sale_price = data\r\n\r\n                # Update the corresponding text fields with the retrieved data\r\n                self.var_pname.set(product_name)\r\n                self.var_sale.set(sale_price)\r\n\r\n\r\n            else:\r\n                # No data found for the product ID\r\n                messagebox.showinfo(\"Not Found\", f\"No data found for Product ID: {product_id}\")\r\n\r\n        except Exception as e:\r\n            messagebox.showerror(\"Error\", f\"Error: {str(e)}\")\r\n\r\n    def dashboard(self):\r\n        self.root.destroy()\r\n        subprocess.run(['python', 'dashboard.py'])\r\nroot=Tk()         \r\nobj=customerClass(root)\r\nroot.mainloop()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/customer.py b/customer.py
+--- a/customer.py	(revision d8838fa25851c0508f1fca4d6e98c9e520af3400)
++++ b/customer.py	(date 1712484313213)
+@@ -17,7 +17,7 @@
+        self.db = mysql.connector.connect(
+             host="localhost",
+             user="root",
+-            password="D@zypiyu123",
++            password="root",
+             database="retailers",
+             port=3306
+         )
+@@ -39,7 +39,7 @@
+        
+ 
+        #====title======
+-       title=Label(self.root,text="CUSTOMER DETAILS",font=("goudy old sty;e",15),bg="#0f4d7d",fg="white").place(x=50,y=100,width=1000)
++       title=Label(self.root,text="CUSTOMER DETAILS",font=("goudy old sty;e",15),bg="#0f4d7d",fg="white").place(x=50,y=100,width=1150)
+ 
+        #=======content=========
+        #=========row1==========
+@@ -61,13 +61,14 @@
+        txt_sale=Entry(self.root,textvariable=self.var_sale,font=("goudy old sty;e",15),bg="lightyellow").place(x=850,y=220,width=180)
+ 
+        #==================buttons============
+-       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place(x=450,y=305,width=110,height=28)
+-       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=580,y=305,width=110,height=28)
++       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place_configure(x=350,y=305,width=120,height=28)
++       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=600,y=305,width=120,height=28)
+        btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
+                          command=self.dashboard,
+                          cursor="hand2").place(x=1050, y=20, width=80, height=25)
+        btn_check = Button(self.root, text = "check" , font = ("goudy old style" , 10) , bg = "blue" , fg = "white" ,
+                         cursor = "hand2",command = self.search_data).place(x = 150 , y = 185 , width = 80 , height = 25)
++       btn_calculate=Button(self.root,text="CALCULATE",command = self.calculate_total,font=("goudy old style",15),bg="deep sky blue",fg="white",cursor="hand2").place(x=475,y=305,width=120,height=28)
+ 
+        #====================Customer Details=================
+ 
+@@ -123,17 +124,21 @@
+ 
+             messagebox.showinfo("Success" , "Data saved successfully!")
+             self.clear_data()
++            self.update_treeview()
+         except Exception as e :
+             messagebox.showerror("Error" , f"Error: {str(e)}")
+ 
+ 
+     def update_treeview(self):
+-    # Fetch data from the database
+-        query = "SELECT * FROM customer"
++        # Clear the existing rows in the Treeview
++        for row in self.CustomerTable.get_children() :
++            self.CustomerTable.delete(row)
++
++        # Fetch data from the database
++        query = "SELECT product_id, product_name, product_quantity, cust_name, total_amount, sale_price FROM customer"
+         self.cursor.execute(query)
+         data = self.cursor.fetchall()
+-
+-    # Insert data into the Treeview
++        # Insert data into the Treeview
+         for row in data:
+           self.CustomerTable.insert("", "end", values=row)
+ 
+@@ -170,6 +175,29 @@
+         except Exception as e:
+             messagebox.showerror("Error", f"Error: {str(e)}")
+ 
++    def calculate_total(self) :
++        product_quantity = self.var_quantity.get()
++
++        if product_quantity != "" :
++            try :
++                sale_price = float(self.var_sale.get())
++                # Fetch the GST rate from the database for the given product ID
++                query = "SELECT * FROM inventory WHERE prod_id = %s"
++                self.cursor.execute(query , (self.var_cust_id.get() ,))
++                product_data = self.cursor.fetchone()
++                if product_data :
++                    gst = product_data[6]  # Assuming GST is the 7th column (index 6) in the fetched row
++                    total_price = sale_price * int(product_quantity) * (1 + gst / 100)
++
++                    # Update the total amount entry field with the calculated value
++                    self.var_amount.set(round(total_price , 2))
++                else :
++                    messagebox.showerror("Error" , "Failed to retrieve product data for the specified product ID")
++            except Exception as e :
++                messagebox.showerror("Error" , f"Error calculating total price: {str(e)}")
++        else :
++            messagebox.showerror("Error" , "Product quantity cannot be empty!")
++
+     def dashboard(self):
+         self.root.destroy()
+         subprocess.run(['python', 'dashboard.py'])
+Index: supplier.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from tkinter import*\r\nfrom PIL import Image,ImageTk #pip install pillow\r\nfrom tkinter import ttk,messagebox\r\nimport mysql.connector\r\n\r\nclass supplierClass:\r\n    def __init__(self,root):\r\n       self.root=root\r\n       self.root.geometry(\"1150x600+220+130\")\r\n       self.root.title(\"RETAIL PRO\")\r\n       self.root.config(bg=\"white\")\r\n       self.root.focus_force()\r\n\r\n       self.db = mysql.connector.connect(\r\n            host=\"localhost\",\r\n            user=\"root\",\r\n            password=\"D@zypiyu123\",\r\n            database=\"retailers\",\r\n            port=3306\r\n        )\r\n\r\n       self.cursor = self.db.cursor()\r\n\r\n       #====title====\r\n       self.icon_title=PhotoImage(file=\"logo1.png\")\r\n       title=Label(self.root,text=\"RETAIL PRO\",image=self.icon_title,compound=LEFT,font=(\"times new roman\",40,\"bold\"),bg=\"#010c48\",fg=\"white\",anchor=\"w\",padx=20).place(x=0,y=0,relwidth=1,height=70)\r\n\r\n       #======================================\r\n       # All Variables=======\r\n       self.var_supp_name=StringVar()\r\n       self.var_mobile=StringVar()\r\n       self.var_ppid=StringVar()\r\n       self.var_pname=StringVar()\r\n       self.var_pprice=StringVar()\r\n       self.var_qntty=StringVar()\r\n       self.var_salesp=StringVar()\r\n       self.var_tprice=StringVar()\r\n       self.var_searchtxt=StringVar()\r\n       self.var_dropdown = StringVar()\r\n       self.var_alert = StringVar()\r\n     \r\n\r\n       \r\n      \r\n       \r\n       #===================searchFrame========\r\n       #==========option========\r\n       lbl_search=Label(self.root,text=\"Search by Product Id.\",bg=\"white\",font=(\"goudy old style\",15))\r\n       lbl_search.place(x=300,y=450)\r\n\r\n       txt_search=Entry(self.root,textvariable=self.var_searchtxt,font=(\"goundy old style\",15),bg=\"lightyellow\").place(x=500,y=450)\r\n       btn_search=Button(self.root,text=\"Search\",command=self.var_searchtxt,font=(\"goudy old style\",15),bg=\"#0f4d7d\",fg=\"white\").place(x=750,y=450,width=90)\r\n\r\n       #====title======\r\n       title=Label(self.root,text=\"SUPPLIER DETAILS\",font=(\"goudy old sty;e\",15),bg=\"#0f4d7d\",fg=\"white\").place(x=50,y=100,width=1000)\r\n\r\n       #=======content=========\r\n       #=========row1==========\r\n       lbl_supp_name=Label(self.root,text=\"Sup.Name\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=50,y=150)\r\n       lbl_mobile=Label(self.root,text=\"Mobile No\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=400,y=150)\r\n       lbl_ppid=Label(self.root,text=\"Product Id\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=750,y=150)\r\n\r\n       txt_supp_name=Entry(self.root,textvariable=self.var_supp_name,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=180,y=150,width=180)\r\n       txt_mobile=Entry(self.root,textvariable=self.var_mobile,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=550,y=150,width=180)\r\n       txt_ppid=Entry(self.root,textvariable=self.var_ppid,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=850,y=150,width=180)\r\n\r\n         #=========row2==========\r\n       lbl_pname=Label(self.root,text=\"Product Name\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=50,y=220)\r\n       lbl_pprice=Label(self.root,text=\"Purchase Price\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=400,y=220)\r\n       lbl_qntty=Label(self.root,text=\"Quantity\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=750,y=220)\r\n       lbl_salesprice=Label(self.root,text=\"Sales price\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=50,y=300)\r\n       lbl_tprice=Label(self.root,text=\"Total price\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=400,y=300)\r\n       lbl_alert=Label(self.root,text=\"Low stock alert\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=750,y=300)\r\n       lbl_gst=Label(self.root,text=\"GST\",font=(\"goudy old sty;e\",15),bg=\"white\").place(x=100,y=370)\r\n\r\n\r\n\r\n\r\n       txt_pname=Entry(self.root,textvariable=self.var_pname,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=180,y=220,width=180)\r\n       txt_pprice=Entry(self.root,textvariable=self.var_pprice,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=550,y=220,width=180)\r\n       txt_qntty=Entry(self.root,textvariable=self.var_qntty,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=850,y=220,width=180)\r\n       txt_salesprice=Entry(self.root,textvariable=self.var_salesp,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=180,y=300,width=180)\r\n       txt_tprice=Entry(self.root,textvariable=self.var_tprice,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=550,y=300,width=180)\r\n       txt_alert=Entry(self.root,textvariable=self.var_alert,font=(\"goudy old sty;e\",15),bg=\"lightyellow\").place(x=850,y=300,width=100)\r\n       options = [\"5%\", \"12%\", \"18%\",\"28%\"]  # Replace with your desired options\r\n       dropdown = ttk.Combobox(self.root, textvariable=self.var_dropdown, values=options, font=(\"goudy old style\", 15),background=\"lightyellow\")\r\n       dropdown.place(x=180, y=370, width=120)\r\n\r\n\r\n\r\n\r\n\r\n       #==================buttons============\r\n       btn_add=Button(self.root,text=\"SAVE\",font=(\"goudy old style\",15),bg=\"#2196f3\",fg=\"white\",cursor=\"hand2\",command=self.save_data).place(x=450,y=400,width=110,height=28)\r\n       btn_clear=Button(self.root,text=\"CLEAR\",font=(\"goudy old style\",15),bg=\"#607d8b\",fg=\"white\",cursor=\"hand2\",command=self.clear_data).place(x=580,y=400,width=110,height=28)\r\n\r\n       \r\n       #====================Supplier Details=================\r\n       supp_frame=Frame(self.root,bd=3,relief=RIDGE)\r\n       supp_frame.place(x=0,y=500,relwidth=1,height=400)\r\n\r\n       scrolly=Scrollbar(supp_frame,orient=VERTICAL)\r\n       scrollX=Scrollbar(supp_frame,orient=HORIZONTAL)\r\n\r\n       self.SupplierTable=ttk.Treeview(supp_frame,column=(\"sname\",\"smobile\",\"ppid\",\"pname\",\"pprice\",\"qnty\",\"sprice\",\"gst\",\"tprice\"),yscrollcommand=scrolly.set,xscrollcommand=scrollX.set)       \r\n       scrollX.pack(side=BOTTOM,fill=X)\r\n       scrolly.pack(side=RIGHT,fill=Y)\r\n       scrollX.config(command=self.SupplierTable.xview)\r\n       scrolly.config(command=self.SupplierTable.yview) \r\n       self.SupplierTable.heading(\"sname\",text=\"Supplier Name\")\r\n       self.SupplierTable.heading(\"smobile\",text=\"Supplier mobile no\")\r\n       self.SupplierTable.heading(\"ppid\",text=\"Product ID\")\r\n       self.SupplierTable.heading(\"pname\",text=\"Product Name\")\r\n       self.SupplierTable.heading(\"pprice\",text=\"Purchase Price\")\r\n       self.SupplierTable.heading(\"qnty\",text=\"Quantity bought\")\r\n       self.SupplierTable.heading(\"sprice\",text=\"sales price\")\r\n       self.SupplierTable.heading(\"gst\",text=\"GST\")\r\n       self.SupplierTable.heading(\"tprice\",text=\"Total Price\")\r\n\r\n       self.SupplierTable[\"show\"]=\"headings\"\r\n       self.SupplierTable.pack(fill=BOTH,expand=1)\r\n\r\n    def clear_data(self):\r\n        # Clearing text in entry widgets\r\n       \r\n        self.var_supp_name.set(\"\")\r\n        self.var_mobile.set(\"\")\r\n        self.var_ppid.set(\"\")\r\n        self.var_pname.set(\"\")\r\n        self.var_pprice.set(\"\")\r\n        self.var_qntty.set(\"\")\r\n        self.var_salesp.set(\"\")\r\n        self.var_tprice.set(\"\")\r\n        self.var_searchtxt.set(\"\")\r\n        self.var_dropdown .set(\"\")\r\n        self.var_alert.set(\"\")\r\n    def save_data(self):\r\n        try:\r\n            # Fetching data from entry widgets\r\n            \r\n            \r\n            spname=self.var_supp_name.get()\r\n            mobino=self.var_mobile.get()\r\n            prid=self.var_ppid.get()\r\n            prname=self.var_pname.get()\r\n            pprice=self.var_pprice.get()\r\n            qntty=self.var_qntty.get()\r\n            salepr=self.var_salesp.get()\r\n            ttpr=self.var_tprice.get()\r\n            alrt=self.var_alert.get()\r\n\r\n            \r\n            dpd=self.var_dropdown .get()\r\n\r\n            # Inserting data into the database\r\n            query = \"INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, total_price, gst, low_stockalert) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s)\"\r\n            values = (spname, mobino,prid, prname,pprice,qntty,salepr,ttpr,dpd,alrt)\r\n\r\n            self.cursor.execute(query, values)\r\n            self.db.commit()\r\n\r\n            messagebox.showinfo(\"Success\", \"Data saved successfully!\")\r\n            self.clear_data()\r\n            \r\n        except Exception as e:\r\n            messagebox.showerror(\"Error\", f\"Error: {str(e)}\")\r\n      \r\nroot=Tk()         \r\nobj=supplierClass(root)\r\nroot.mainloop()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/supplier.py b/supplier.py
+--- a/supplier.py	(revision d8838fa25851c0508f1fca4d6e98c9e520af3400)
++++ b/supplier.py	(date 1712485291182)
+@@ -1,128 +1,177 @@
+-from tkinter import*
+-from PIL import Image,ImageTk #pip install pillow
+-from tkinter import ttk,messagebox
++import subprocess
++from datetime import *
++from tkinter import *
++from PIL import Image, ImageTk
++from tkinter import ttk, messagebox
+ import mysql.connector
+ 
+ class supplierClass:
+-    def __init__(self,root):
+-       self.root=root
+-       self.root.geometry("1150x600+220+130")
+-       self.root.title("RETAIL PRO")
+-       self.root.config(bg="white")
+-       self.root.focus_force()
++    def __init__(self, root):
++        self.root = root
++        self.root.geometry("1150x600+220+130")
++        self.root.title("RETAIL PRO")
++        self.root.config(bg="white")
++        self.root.focus_force()
+ 
+-       self.db = mysql.connector.connect(
++        self.db = mysql.connector.connect(
+             host="localhost",
+             user="root",
+-            password="D@zypiyu123",
++            password="root",
+             database="retailers",
+             port=3306
+         )
+ 
+-       self.cursor = self.db.cursor()
++        self.cursor = self.db.cursor()
+ 
+-       #====title====
+-       self.icon_title=PhotoImage(file="logo1.png")
+-       title=Label(self.root,text="RETAIL PRO",image=self.icon_title,compound=LEFT,font=("times new roman",40,"bold"),bg="#010c48",fg="white",anchor="w",padx=20).place(x=0,y=0,relwidth=1,height=70)
++        # ====title====
++        self.icon_title = PhotoImage(file="logo1.png")
++        title = Label(self.root, text="RETAIL PRO", image=self.icon_title, compound=LEFT, font=("times new roman", 40, "bold"), bg="#010c48", fg="white", anchor="w", padx=20).place(x=0, y=0, relwidth=1, height=70)
+ 
+-       #======================================
+-       # All Variables=======
+-       self.var_supp_name=StringVar()
+-       self.var_mobile=StringVar()
+-       self.var_ppid=StringVar()
+-       self.var_pname=StringVar()
+-       self.var_pprice=StringVar()
+-       self.var_qntty=StringVar()
+-       self.var_salesp=StringVar()
+-       self.var_tprice=StringVar()
+-       self.var_searchtxt=StringVar()
+-       self.var_dropdown = StringVar()
+-       self.var_alert = StringVar()
+-     
++        # ======================================
++        # All Variables=======
++        self.var_supp_name = StringVar()
++        self.var_mobile = StringVar()
++        self.var_ppid = StringVar()
++        self.var_pname = StringVar()
++        self.var_pprice = StringVar()
++        self.var_qntty = StringVar()
++        self.var_iniqntty = StringVar()
++        self.var_salesp = StringVar()
++        self.var_tprice = StringVar()
++        self.var_searchtxt = StringVar()
++        self.var_dropdown = StringVar()
++        self.var_alert = StringVar()
+ 
+-       
+-      
+-       
+-       #===================searchFrame========
+-       #==========option========
+-       lbl_search=Label(self.root,text="Search by Product Id.",bg="white",font=("goudy old style",15))
+-       lbl_search.place(x=300,y=450)
++        # ===================searchFrame========
++        # ==========option========
++        lbl_search = Label(self.root, text="Search by Product Id.", bg="white", font=("goudy old style", 15))
++        lbl_search.place(x=300, y=450)
+ 
+-       txt_search=Entry(self.root,textvariable=self.var_searchtxt,font=("goundy old style",15),bg="lightyellow").place(x=500,y=450)
+-       btn_search=Button(self.root,text="Search",command=self.var_searchtxt,font=("goudy old style",15),bg="#0f4d7d",fg="white").place(x=750,y=450,width=90)
++        txt_search = Entry(self.root, textvariable=self.var_searchtxt, font=("goudy old style", 15), bg="lightyellow")
++        txt_search.place(x=500, y=450)
++        btn_search = Button(self.root, text="Search", command=self.check_prod_id, font=("goudy old style", 15), bg="#0f4d7d", fg="white")
++        btn_search.place(x=750, y=450, width=90)
+ 
+-       #====title======
+-       title=Label(self.root,text="SUPPLIER DETAILS",font=("goudy old sty;e",15),bg="#0f4d7d",fg="white").place(x=50,y=100,width=1000)
++        # ====title======
++        title = Label(self.root, text="SUPPLIER DETAILS", font=("goudy old style", 15), bg="#0f4d7d", fg="white")
++        title.place(x=50, y=100, width=1000)
+ 
+-       #=======content=========
+-       #=========row1==========
+-       lbl_supp_name=Label(self.root,text="Sup.Name",font=("goudy old sty;e",15),bg="white").place(x=50,y=150)
+-       lbl_mobile=Label(self.root,text="Mobile No",font=("goudy old sty;e",15),bg="white").place(x=400,y=150)
+-       lbl_ppid=Label(self.root,text="Product Id",font=("goudy old sty;e",15),bg="white").place(x=750,y=150)
+-
+-       txt_supp_name=Entry(self.root,textvariable=self.var_supp_name,font=("goudy old sty;e",15),bg="lightyellow").place(x=180,y=150,width=180)
+-       txt_mobile=Entry(self.root,textvariable=self.var_mobile,font=("goudy old sty;e",15),bg="lightyellow").place(x=550,y=150,width=180)
+-       txt_ppid=Entry(self.root,textvariable=self.var_ppid,font=("goudy old sty;e",15),bg="lightyellow").place(x=850,y=150,width=180)
++        # =======content=========
++        # ==========row1==========
++        lbl_supp_name = Label(self.root, text="Sup.Name", font=("goudy old style", 15), bg="white")
++        lbl_supp_name.place(x=50, y=150)
++        lbl_mobile = Label(self.root, text="Mobile No", font=("goudy old style", 15), bg="white")
++        lbl_mobile.place(x=400, y=150)
++        lbl_ppid = Label(self.root, text="Product Id", font=("goudy old style", 15), bg="white")
++        lbl_ppid.place(x=750, y=150)
+ 
+-         #=========row2==========
+-       lbl_pname=Label(self.root,text="Product Name",font=("goudy old sty;e",15),bg="white").place(x=50,y=220)
+-       lbl_pprice=Label(self.root,text="Purchase Price",font=("goudy old sty;e",15),bg="white").place(x=400,y=220)
+-       lbl_qntty=Label(self.root,text="Quantity",font=("goudy old sty;e",15),bg="white").place(x=750,y=220)
+-       lbl_salesprice=Label(self.root,text="Sales price",font=("goudy old sty;e",15),bg="white").place(x=50,y=300)
+-       lbl_tprice=Label(self.root,text="Total price",font=("goudy old sty;e",15),bg="white").place(x=400,y=300)
+-       lbl_alert=Label(self.root,text="Low stock alert",font=("goudy old sty;e",15),bg="white").place(x=750,y=300)
+-       lbl_gst=Label(self.root,text="GST",font=("goudy old sty;e",15),bg="white").place(x=100,y=370)
++        txt_supp_name = Entry(self.root, textvariable=self.var_supp_name, font=("goudy old style", 15), bg="lightyellow")
++        txt_supp_name.place(x=180, y=150, width=180)
++        txt_mobile = Entry(self.root, textvariable=self.var_mobile, font=("goudy old style", 15), bg="lightyellow")
++        txt_mobile.place(x=550, y=150, width=180)
++        txt_ppid = Entry(self.root, textvariable=self.var_ppid, font=("goudy old style", 15), bg="lightyellow")
++        txt_ppid.place(x=850, y=150, width=180)
+ 
++        # ==========row2==========
++        lbl_pname = Label(self.root, text="Product Name", font=("goudy old style", 15), bg="white")
++        lbl_pname.place(x=50, y=220)
++        lbl_pprice = Label(self.root, text="Purchase Price", font=("goudy old style", 15), bg="white")
++        lbl_pprice.place(x=400, y=220)
++        lbl_qntty = Label(self.root, text="Quantity", font=("goudy old style", 15), bg="white")
++        lbl_qntty.place(x=750, y=220)
++        lbl_salesprice = Label(self.root, text="Sales price", font=("goudy old style", 15), bg="white")
++        lbl_salesprice.place(x=50, y=300)
++        lbl_tprice = Label(self.root, text="Total price", font=("goudy old style", 15), bg="white")
++        lbl_tprice.place(x=400, y=300)
++        lbl_alert = Label(self.root, text="Low stock alert", font=("goudy old style", 15), bg="white")
++        lbl_alert.place(x=750, y=300)
++        lbl_gst = Label(self.root, text="GST", font=("goudy old style", 15), bg="white")
++        lbl_gst.place(x=100, y=370)
++        lbl_plus = Label(self.root, text="+", font=("goudy old style", 15), bg="white")
++        lbl_plus.place(x=905, y=220, width=10)
++        lbl_percentage = Label(self.root, text="%", font=("goudy old style", 15), bg="white")
++        lbl_percentage.place(x=305, y=370, width=20)
+ 
++        txt_pname = Entry(self.root, textvariable=self.var_pname, font=("goudy old style", 15), bg="lightyellow")
++        txt_pname.place(x=180, y=220, width=180)
++        txt_pprice = Entry(self.root, textvariable=self.var_pprice, font=("goudy old style", 15), bg="lightyellow")
++        txt_pprice.place(x=550, y=220, width=180)
++        txt_iniqntty = Entry(self.root, textvariable=self.var_iniqntty, font=("goudy old style", 15), bg="lightyellow")
++        txt_iniqntty.place(x=850, y=220, width=50)
++        txt_qntty = Entry(self.root, textvariable=self.var_qntty, font=("goudy old style", 15), bg="lightyellow")
++        txt_qntty.place(x=920, y=220, width=50)
++        txt_salesprice = Entry(self.root, textvariable=self.var_salesp, font=("goudy old style", 15), bg="lightyellow")
++        txt_salesprice.place(x=180, y=300, width=180)
++        txt_tprice = Entry(self.root, textvariable=self.var_tprice, font=("goudy old style", 15), bg="lightyellow")
++        txt_tprice.place(x=550, y=300, width=180)
++        txt_alert = Entry(self.root, textvariable=self.var_alert, font=("goudy old style", 15), bg="lightyellow")
++        txt_alert.place(x=850, y=300, width=100)
+ 
+-
+-       txt_pname=Entry(self.root,textvariable=self.var_pname,font=("goudy old sty;e",15),bg="lightyellow").place(x=180,y=220,width=180)
+-       txt_pprice=Entry(self.root,textvariable=self.var_pprice,font=("goudy old sty;e",15),bg="lightyellow").place(x=550,y=220,width=180)
+-       txt_qntty=Entry(self.root,textvariable=self.var_qntty,font=("goudy old sty;e",15),bg="lightyellow").place(x=850,y=220,width=180)
+-       txt_salesprice=Entry(self.root,textvariable=self.var_salesp,font=("goudy old sty;e",15),bg="lightyellow").place(x=180,y=300,width=180)
+-       txt_tprice=Entry(self.root,textvariable=self.var_tprice,font=("goudy old sty;e",15),bg="lightyellow").place(x=550,y=300,width=180)
+-       txt_alert=Entry(self.root,textvariable=self.var_alert,font=("goudy old sty;e",15),bg="lightyellow").place(x=850,y=300,width=100)
+-       options = ["5%", "12%", "18%","28%"]  # Replace with your desired options
+-       dropdown = ttk.Combobox(self.root, textvariable=self.var_dropdown, values=options, font=("goudy old style", 15),background="lightyellow")
+-       dropdown.place(x=180, y=370, width=120)
++        options = [0, 5, 12, 18, 28]  # GST rate
++        dropdown = ttk.Combobox(self.root, textvariable=self.var_dropdown, values=options, font=("goudy old style", 15), background="lightyellow")
++        dropdown.place(x=180, y=370, width=120)
+ 
+-
+-
+-
+-
+-       #==================buttons============
+-       btn_add=Button(self.root,text="SAVE",font=("goudy old style",15),bg="#2196f3",fg="white",cursor="hand2",command=self.save_data).place(x=450,y=400,width=110,height=28)
+-       btn_clear=Button(self.root,text="CLEAR",font=("goudy old style",15),bg="#607d8b",fg="white",cursor="hand2",command=self.clear_data).place(x=580,y=400,width=110,height=28)
++        # ==================buttons============
++        btn_add = Button(self.root, text="SAVE", font=("goudy old style", 15), bg="#2196f3", fg="white", cursor="hand2", command=self.save_data)
++        btn_add.place(x=450, y=400, width=120, height=28)
+ 
+-       
+-       #====================Supplier Details=================
+-       supp_frame=Frame(self.root,bd=3,relief=RIDGE)
+-       supp_frame.place(x=0,y=500,relwidth=1,height=400)
++        btn_clear = Button(self.root, text="CLEAR", font=("goudy old style", 15), bg="#607d8b", fg="white", cursor="hand2", command=self.clear_data)
++        btn_clear.place(x=710, y=400, width=120, height=28)
++
++        btn_back = Button(self.root , text = "BACK" , font = ("goudy old style" , 10) , bg = "blue" , fg = "white" ,command = self.dashboard ,cursor = "hand2").place(x = 1050 , y = 20 , width = 80 , height = 25)
++
++        btn_calculate = Button(self.root, text="CALCULATE", font=("goudy old style", 15), bg="deep sky blue", fg="white", cursor="hand2", command=self.calculate_total_price)
++        btn_calculate.place(x=580, y=400, width=120, height=28)
++        btn_check_id = Button(self.root, text="Check", font=("goudy old style", 12), bg="#4caf50", fg="white", cursor="hand2", command=self.check_prod_id)
++        btn_check_id.place(x=850, y=180, width=60, height=25)
++        # ====================Supplier Details=================
++        supp_frame = Frame(self.root, bd=3, relief=RIDGE)
++        supp_frame.place(x=0, y=500, relwidth=1, height=400)
+ 
+-       scrolly=Scrollbar(supp_frame,orient=VERTICAL)
+-       scrollX=Scrollbar(supp_frame,orient=HORIZONTAL)
++        scrolly = Scrollbar(supp_frame, orient=VERTICAL)
++        scrollX = Scrollbar(supp_frame, orient=HORIZONTAL)
+ 
+-       self.SupplierTable=ttk.Treeview(supp_frame,column=("sname","smobile","ppid","pname","pprice","qnty","sprice","gst","tprice"),yscrollcommand=scrolly.set,xscrollcommand=scrollX.set)       
+-       scrollX.pack(side=BOTTOM,fill=X)
+-       scrolly.pack(side=RIGHT,fill=Y)
+-       scrollX.config(command=self.SupplierTable.xview)
+-       scrolly.config(command=self.SupplierTable.yview) 
+-       self.SupplierTable.heading("sname",text="Supplier Name")
+-       self.SupplierTable.heading("smobile",text="Supplier mobile no")
+-       self.SupplierTable.heading("ppid",text="Product ID")
+-       self.SupplierTable.heading("pname",text="Product Name")
+-       self.SupplierTable.heading("pprice",text="Purchase Price")
+-       self.SupplierTable.heading("qnty",text="Quantity bought")
+-       self.SupplierTable.heading("sprice",text="sales price")
+-       self.SupplierTable.heading("gst",text="GST")
+-       self.SupplierTable.heading("tprice",text="Total Price")
++        self.SupplierTable = ttk.Treeview(supp_frame, column=("sname", "smobile", "ppid", "pname", "pprice", "qnty", "sprice", "gst", "tprice"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
++        scrollX.pack(side=BOTTOM, fill=X)
++        scrolly.pack(side=RIGHT, fill=Y)
++        scrollX.config(command=self.SupplierTable.xview)
++        scrolly.config(command=self.SupplierTable.yview)
++        self.SupplierTable.heading("sname", text="Supplier Name")
++        self.SupplierTable.heading("smobile", text="Supplier mobile no")
++        self.SupplierTable.heading("ppid", text="Product ID")
++        self.SupplierTable.heading("pname", text="Product Name")
++        self.SupplierTable.heading("pprice", text="Purchase Price")
++        self.SupplierTable.heading("qnty", text="Quantity bought")
++        self.SupplierTable.heading("sprice", text="sales price")
++        self.SupplierTable.heading("gst", text="GST")
++        self.SupplierTable.heading("tprice", text="Total Price")
+ 
+-       self.SupplierTable["show"]="headings"
+-       self.SupplierTable.pack(fill=BOTH,expand=1)
++        self.SupplierTable["show"] = "headings"
++        self.SupplierTable.pack(fill=BOTH, expand=1)
++        self.update_treeview()
++
++    def get_month_abbreviation(self, month_number):
++        month_abbr = {
++            1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
++            7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
++        }
++        return month_abbr.get(month_number, '')
++
++    def update_treeview(self):
++        # Clear the existing rows in the Treeview
++        for row in self.SupplierTable.get_children():
++            self.SupplierTable.delete(row)
++
++        # Fetch data from the database
++        query = "SELECT supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price, low_stockalert FROM supplier"
++        self.cursor.execute(query)
++        data = self.cursor.fetchall()
++        # Insert data into the Treeview
++        for row in data:
++            self.SupplierTable.insert("", "end", values=row)
+ 
+     def clear_data(self):
+         # Clearing text in entry widgets
+-       
+         self.var_supp_name.set("")
+         self.var_mobile.set("")
+         self.var_ppid.set("")
+@@ -132,39 +181,120 @@
+         self.var_salesp.set("")
+         self.var_tprice.set("")
+         self.var_searchtxt.set("")
+-        self.var_dropdown .set("")
++        self.var_dropdown.set("")
+         self.var_alert.set("")
+-    def save_data(self):
+-        try:
++
++    def calculate_total_price(self):
++        try:
++            purchase_price = self.var_pprice.get()
++            quantity = self.var_qntty.get()
++            gst = self.var_dropdown.get()
++
++            if purchase_price and quantity and gst:
++                purchase_price = float(purchase_price)
++                quantity = int(quantity)
++                # convert it to a decimal
++                gst_decimal = float(gst) / 100
++                total_price = purchase_price * quantity * (1 + gst_decimal)
++                self.var_tprice.set(round(total_price, 2))
++            else:
++                messagebox.showerror("Error", "Purchase Price, Quantity, and GST must be specified.")
++        except Exception as e:
++            messagebox.showerror("Error", f"Error calculating total price: {str(e)}")
++
++    def save_data(self) :
++        try :
+             # Fetching data from entry widgets
+-            
+-            
+-            spname=self.var_supp_name.get()
+-            mobino=self.var_mobile.get()
+-            prid=self.var_ppid.get()
+-            prname=self.var_pname.get()
+-            pprice=self.var_pprice.get()
+-            qntty=self.var_qntty.get()
+-            salepr=self.var_salesp.get()
+-            ttpr=self.var_tprice.get()
+-            alrt=self.var_alert.get()
+-
+-            
+-            dpd=self.var_dropdown .get()
++            spname = self.var_supp_name.get()
++            mobino = self.var_mobile.get()
++            prid = int(self.var_ppid.get())
++            prname = self.var_pname.get()
++            pprice = self.var_pprice.get()
++            qntty = self.var_qntty.get()
++            salepr = self.var_salesp.get()
++            ttpr = self.var_tprice.get()
++            alrt = self.var_alert.get()
++            dpd = self.var_dropdown.get()
+ 
+-            # Inserting data into the database
+-            query = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, total_price, gst, low_stockalert) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s)"
+-            values = (spname, mobino,prid, prname,pprice,qntty,salepr,ttpr,dpd,alrt)
++            # Check if the product exists in the inventory
++            check_query = "SELECT * FROM inventory WHERE prod_id = %s"
++            self.cursor.execute(check_query , (prid ,))
++            result = self.cursor.fetchone()
+ 
+-            self.cursor.execute(query, values)
++            if not result :
++                stock_quantity = self.var_qntty.get()
++                stock_price = float(stock_quantity) * float(salepr) + float(stock_quantity) * float(salepr) * (
++                        int(dpd) / 100)
++                # Insert the new product into the inventory
++                insert_query = "INSERT INTO inventory (prod_id, prd_name, purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
++                insert_values = (prid , prname , pprice , salepr , stock_quantity , stock_price , int(dpd) , alrt)
++                self.cursor.execute(insert_query , insert_values)
++                self.db.commit()
++            else :
++                # If the product already exists, update its details
++                update_query = "UPDATE inventory SET prd_name = %s, purchase_per_unit = %s, sale_per_unit = %s, stock_quantity = stock_quantity + %s, stock_price = stock_price + %s + %s * %s, GST = %s, low_stk_alert = %s WHERE prod_id = %s"
++                # Fetching initial stock quantity from the inventory
++                query = "SELECT stock_quantity FROM inventory WHERE prod_id = %s"
++                self.cursor.execute(query , (prid ,))
++                initial_stock_quantity = self.cursor.fetchone()[0]
++                # Calculate total quantity
++                total_quantity = initial_stock_quantity + int(qntty)
++                # Calculate new stock price
++                stock_price = total_quantity * float(salepr) + total_quantity * float(salepr) * (int(dpd) / 100)
++                update_values = (prname , pprice , salepr , total_quantity , stock_price , int(dpd) , alrt , prid)
++                self.cursor.execute(update_query , update_values)
++                self.db.commit()
++
++            # Inserting data into the supplier table
++            query = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price, low_stockalert, purchase_month) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
++            values = (
++            spname , mobino , prid , prname , pprice , qntty , salepr , int(dpd) , ttpr , alrt , datetime.now().month)
++            self.cursor.execute(query , values)
+             self.db.commit()
+ 
+-            messagebox.showinfo("Success", "Data saved successfully!")
++            messagebox.showinfo("Success" , "Data saved successfully!")
+             self.clear_data()
+-            
+-        except Exception as e:
+-            messagebox.showerror("Error", f"Error: {str(e)}")
+-      
+-root=Tk()         
+-obj=supplierClass(root)
+-root.mainloop()
+\ No newline at end of file
++            self.update_treeview()
++
++        except Exception as e :
++            messagebox.showerror("Error" , f"Error: {str(e)}")
++
++    def get_month_abbreviation(self , month_number) :
++        month_abbr = {
++            1 : 'Jan' , 2 : 'Feb' , 3 : 'Mar' , 4 : 'Apr' , 5 : 'May' , 6 : 'Jun' ,
++            7 : 'Jul' , 8 : 'Aug' , 9 : 'Sep' , 10 : 'Oct' , 11 : 'Nov' , 12 : 'Dec'
++        }
++        return month_abbr.get(month_number , '')
++    def check_prod_id(self):
++        try:
++            product_id = self.var_ppid.get()
++
++            # Fetching data from the database based on the entered product ID
++            query = "SELECT prd_name, purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prod_id = %s"
++            self.cursor.execute(query, (product_id,))
++            data = self.cursor.fetchone()
++
++            if data:
++                # Product ID found in the inventory
++                product_name, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
++
++                # Update the corresponding text fields with the retrieved data
++                self.var_pname.set(product_name)
++                self.var_pprice.set(purchase_price)
++                self.var_salesp.set(sale_price)
++                self.var_iniqntty.set(stock_quantity)
++                self.var_dropdown.set(gst)
++                self.var_alert.set(low_stock_alert)
++
++                messagebox.showinfo("Found", f"Data found for Product ID: {product_id}")
++            else:
++                # Product ID not found in the inventory
++                messagebox.showerror("Not Found", f"No data found for Product ID: {product_id}")
++        except Exception as e:
++            messagebox.showerror("Fetching Error", f"Error fetching data: {str(e)}")
++    def dashboard(self):
++        self.root.destroy()
++        subprocess.run(['python','dashboard.py'])
++root = Tk()
++obj = supplierClass(root)
++root.mainloop()
+Index: Inventory.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from tkinter import*\r\nfrom PIL import Image,ImageTk\r\nfrom tkinter import ttk,messagebox\r\nclass invetnoryClass:\r\n    def __init__(self,root):\r\n       self.root=root\r\n       self.root.geometry(\"1150x600+220+130\")\r\n       self.root.title(\"RETAIL PRO\")\r\n       self.root.config(bg=\"white\")\r\n       self.root.focus_force()\r\n\r\n\r\n       #====All Variables====\r\n       self.var_prd_id=StringVar()\r\n       self.var_prd_name=StringVar()\r\n       self.var_stk_quantity=StringVar()\r\n\r\n       #====title====\r\n       self.icon_title=PhotoImage(file=\"logo1.png\")\r\n       title=Label(self.root,text=\"RETAIL PRO\",image=self.icon_title,compound=LEFT,font=(\"times new roman\",40,\"bold\"),bg=\"#010c48\",fg=\"white\",anchor=\"w\",padx=20).place(x=0,y=0,relwidth=1,height=70)\r\n\r\n      #====invetory====\r\n       inventory_label = Label(self.root, text=\"INVENTORY DETAILS\", font=(\"goudy old sty;e\", 15), bg=\"#0f4d7d\", fg=\"white\").place(x=50, y=100, width=1000)\r\n\r\n      #InventorySatuts label=====\r\n       status_frame=LabelFrame(self.root,\r\n                             bg=\"peach puff\",\r\n                             relief=\"ridge\"\r\n                             )\r\n       status_frame.place_configure(x=0,\r\n                                    y=160,\r\n                                    width=1150,\r\n                                    relheight=0.1\r\n                                    )\r\n       empty_label = Label(status_frame,\r\n                           bg=\"peach puff\")\r\n       empty_label.grid_configure(sticky=\"news\",\r\n                                  padx=230\r\n                                  )\r\n       inventorystatus_label = Label(status_frame,\r\n                                    text= \"Inventory Status : \",\r\n                                    font=(\"Time New Roman\", 13),\r\n                                    bg=\"lemon chiffon\"\r\n                                    )\r\n       inventorystatus_label.grid_configure(column=1,\r\n                                            row=1,\r\n                                            sticky=\"news\",\r\n                                            )\r\n       invtstatus_label=Label(status_frame,\r\n                              text=\"0\",\r\n                              font=(\"Time New Roman\", 13),\r\n                              bg=\"lemon chiffon\"\r\n                              )\r\n       invtstatus_label.grid_configure(row=1,\r\n                                       column=2,\r\n                                       sticky=\"news\",\r\n                                       padx=5\r\n                                       )\r\n\r\n       #showing products in inventory\r\n       inventory_frame=Frame(self.root,bd=3,relief=RIDGE)\r\n       inventory_frame.place(x=0, y=250, relwidth=1, height=400)\r\n\r\n       scrolly = Scrollbar(inventory_frame, orient=VERTICAL)\r\n       scrollX = Scrollbar(inventory_frame, orient=HORIZONTAL)\r\n\r\n       self.InventoryTable=ttk.Treeview(inventory_frame,\r\n                                        columns=(\"prd_id\",\r\n                                                 \"prd_name\",\r\n                                                 \"stk_quantity\")\r\n                                        )\r\n       scrollX.pack(side=BOTTOM,fill=X)\r\n       scrolly.pack(side=RIGHT,fill=Y)\r\n       scrollX.config(command=self.InventoryTable.xview)\r\n       scrolly.config(command=self.InventoryTable.yview)\r\n\r\n       self.InventoryTable.heading(\"prd_id\",text=\"Product Id\")\r\n       self.InventoryTable.heading(\"prd_name\",text=\"Product Name\")\r\n       self.InventoryTable.heading(\"stk_quantity\", text=\"Stock Quantity\")\r\n\r\n       self.InventoryTable[\"show\"]=\"headings\"\r\n       self.InventoryTable.pack(fill=\"both\",\r\n                                expand=1\r\n                                )\r\n\r\n\r\n\r\nroot=Tk()\r\nobj=invetnoryClass(root)\r\nroot.mainloop()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Inventory.py b/Inventory.py
+--- a/Inventory.py	(revision d8838fa25851c0508f1fca4d6e98c9e520af3400)
++++ b/Inventory.py	(date 1712476031868)
+@@ -1,88 +1,114 @@
+ from tkinter import*
++
++import mysql.connector
+ from PIL import Image,ImageTk
+ from tkinter import ttk,messagebox
++
+ class invetnoryClass:
+     def __init__(self,root):
+-       self.root=root
+-       self.root.geometry("1150x600+220+130")
+-       self.root.title("RETAIL PRO")
+-       self.root.config(bg="white")
+-       self.root.focus_force()
++        self.root=root
++        self.root.geometry("1150x600+220+130")
++        self.root.title("RETAIL PRO")
++        self.root.config(bg="white")
++        self.root.focus_force()
+ 
++        self.db = mysql.connector.connect(
++	        host = "localhost" ,
++	        user = "root" ,
++	        password = "root" ,
++	        database = "retailers" ,
++	        port = 3306
++        )
++
++        self.cursor = self.db.cursor()
+ 
+-       #====All Variables====
+-       self.var_prd_id=StringVar()
+-       self.var_prd_name=StringVar()
+-       self.var_stk_quantity=StringVar()
++        #====All Variables====
++        self.var_prd_id=StringVar()
++        self.var_prd_name=StringVar()
++        self.var_stk_quantity=StringVar()
+ 
+-       #====title====
+-       self.icon_title=PhotoImage(file="logo1.png")
+-       title=Label(self.root,text="RETAIL PRO",image=self.icon_title,compound=LEFT,font=("times new roman",40,"bold"),bg="#010c48",fg="white",anchor="w",padx=20).place(x=0,y=0,relwidth=1,height=70)
++        #====title====
++        self.icon_title=PhotoImage(file="logo1.png")
++        title=Label(self.root,text="RETAIL PRO",image=self.icon_title,compound=LEFT,font=("times new roman",40,"bold"),bg="#010c48",fg="white",anchor="w",padx=20).place(x=0,y=0,relwidth=1,height=70)
+ 
+-      #====invetory====
+-       inventory_label = Label(self.root, text="INVENTORY DETAILS", font=("goudy old sty;e", 15), bg="#0f4d7d", fg="white").place(x=50, y=100, width=1000)
++        #====invetory====
++        inventory_label = Label(self.root, text="INVENTORY DETAILS", font=("goudy old sty;e", 15), bg="#0f4d7d", fg="white").place(x=50, y=100, width=1000)
+ 
+-      #InventorySatuts label=====
+-       status_frame=LabelFrame(self.root,
+-                             bg="peach puff",
+-                             relief="ridge"
+-                             )
+-       status_frame.place_configure(x=0,
+-                                    y=160,
+-                                    width=1150,
+-                                    relheight=0.1
+-                                    )
+-       empty_label = Label(status_frame,
+-                           bg="peach puff")
+-       empty_label.grid_configure(sticky="news",
+-                                  padx=230
+-                                  )
+-       inventorystatus_label = Label(status_frame,
+-                                    text= "Inventory Status : ",
+-                                    font=("Time New Roman", 13),
+-                                    bg="lemon chiffon"
+-                                    )
+-       inventorystatus_label.grid_configure(column=1,
+-                                            row=1,
+-                                            sticky="news",
+-                                            )
+-       invtstatus_label=Label(status_frame,
+-                              text="0",
+-                              font=("Time New Roman", 13),
+-                              bg="lemon chiffon"
+-                              )
+-       invtstatus_label.grid_configure(row=1,
+-                                       column=2,
+-                                       sticky="news",
+-                                       padx=5
+-                                       )
++        #InventorySatuts label=====
++        status_frame=LabelFrame(self.root,
++                                bg="peach puff",
++                                relief="ridge"
++                                )
++        status_frame.place_configure(x=0,
++                                     y=160,
++                                     width=1150,
++                                     relheight=0.1
++                                     )
++        empty_label = Label(status_frame,
++                            bg="peach puff")
++        empty_label.grid_configure(sticky="news",
++                                   padx=230
++                                   )
++        inventorystatus_label = Label(status_frame,
++                                      text= "Inventory Status : ",
++                                      font=("Time New Roman", 13),
++                                      bg="lemon chiffon"
++                                      )
++        inventorystatus_label.grid_configure(column=1,
++                                             row=1,
++                                             sticky="news",
++                                             )
++        invtstatus_label=Label(status_frame,
++                               text="0",
++                               font=("Time New Roman", 13),
++                               bg="lemon chiffon"
++                               )
++        invtstatus_label.grid_configure(row=1,
++                                        column=2,
++                                        sticky="news",
++                                        padx=5
++                                        )
+ 
+-       #showing products in inventory
+-       inventory_frame=Frame(self.root,bd=3,relief=RIDGE)
+-       inventory_frame.place(x=0, y=250, relwidth=1, height=400)
++        #showing products in inventory
++        inventory_frame=Frame(self.root,bd=3,relief=RIDGE)
++        inventory_frame.place(x=0, y=250, relwidth=1, height=400)
+ 
+-       scrolly = Scrollbar(inventory_frame, orient=VERTICAL)
+-       scrollX = Scrollbar(inventory_frame, orient=HORIZONTAL)
++        scrolly = Scrollbar(inventory_frame, orient=VERTICAL)
++        scrollX = Scrollbar(inventory_frame, orient=HORIZONTAL)
+ 
+-       self.InventoryTable=ttk.Treeview(inventory_frame,
+-                                        columns=("prd_id",
+-                                                 "prd_name",
+-                                                 "stk_quantity")
+-                                        )
+-       scrollX.pack(side=BOTTOM,fill=X)
+-       scrolly.pack(side=RIGHT,fill=Y)
+-       scrollX.config(command=self.InventoryTable.xview)
+-       scrolly.config(command=self.InventoryTable.yview)
++        self.InventoryTable=ttk.Treeview(inventory_frame,
++                                         columns=("prd_id",
++                                                  "prd_name",
++                                                  "stk_quantity")
++                                         )
++        scrollX.pack(side=BOTTOM,fill=X)
++        scrolly.pack(side=RIGHT,fill=Y)
++        scrollX.config(command=self.InventoryTable.xview)
++        scrolly.config(command=self.InventoryTable.yview)
+ 
+-       self.InventoryTable.heading("prd_id",text="Product Id")
+-       self.InventoryTable.heading("prd_name",text="Product Name")
+-       self.InventoryTable.heading("stk_quantity", text="Stock Quantity")
+-
+-       self.InventoryTable["show"]="headings"
+-       self.InventoryTable.pack(fill="both",
+-                                expand=1
+-                                )
++        self.InventoryTable.heading("prd_id",text="Product Id")
++        self.InventoryTable.heading("prd_name",text="Product Name")
++        self.InventoryTable.heading("prd_name" , text = "Product Name")
++        self.InventoryTable.heading("prd_name" , text = "Product Name")
++        self.InventoryTable.heading("prd_name" , text = "Product Name")
++        self.InventoryTable.heading("prd_name" , text = "Product Name")
++        self.InventoryTable.heading("stk_quantity", text="Stock Quantity")
++        prod_id , prd_name , purchase_per_unit , sale_per_unit , stock_quantity , stock_price , GST , low_stk_alert
++        self.InventoryTable["show"]="headings"
++        self.InventoryTable.pack(fill="both",
++                                 expand=1
++                                 )
++        self.update_treeview()
+ 
++    def update_treeview(self) :
++        # Fetch data from the database
++        query = "SELECT * FROM inventory"
++        self.cursor.execute(query)
++        data = self.cursor.fetchall()
++
++        # Insert data into the Treeview
++        for row in data :
++            self.InventoryTable.insert("" , "end" , values = row)
+ 
+ 
+ root=Tk()
