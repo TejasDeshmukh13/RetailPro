@@ -53,7 +53,7 @@ class supplierClass:
 
         # ====title======
         title = Label(self.root, text="SUPPLIER DETAILS", font=("goudy old style", 15), bg="#0f4d7d", fg="white")
-        title.place(x=50, y=100, width=1150)
+        title.place(x=0, y=100, width=1150)
 
         # =======content=========
         # ==========row1==========
@@ -104,9 +104,9 @@ class supplierClass:
         txt_tprice = Entry(self.root, textvariable=self.var_tprice, font=("goudy old style", 15), bg="lightyellow")
         txt_tprice.place(x=550, y=300, width=180)
         txt_alert = Entry(self.root, textvariable=self.var_alert, font=("goudy old style", 15), bg="lightyellow")
-        txt_alert.place(x=850, y=300, width=100)
+        txt_alert.place(x=890, y=300, width=100)
 
-        options = [0, 5, 12, 18, 28]  # GST rate
+        options = ["0", "5", "12", "18", "28"]  # GST rate
         dropdown = ttk.Combobox(self.root, textvariable=self.var_dropdown, values=options, font=("goudy old style", 15), background="lightyellow")
         dropdown.place(x=180, y=370, width=120)
 
@@ -160,7 +160,7 @@ class supplierClass:
             self.SupplierTable.delete(row)
 
         # Fetch data from the database
-        query = "SELECT supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price, low_stockalert FROM supplier"
+        query = "SELECT supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price FROM supplier"
         self.cursor.execute(query)
         data = self.cursor.fetchall()
         # Insert data into the Treeview
@@ -174,11 +174,12 @@ class supplierClass:
         self.var_ppid.set("")
         self.var_pname.set("")
         self.var_pprice.set("")
+        self.var_iniqntty.set("")
         self.var_qntty.set("")
         self.var_salesp.set("")
         self.var_tprice.set("")
         self.var_searchtxt.set("")
-        self.var_dropdown.set("")
+        self.var_dropdown.set(0)
         self.var_alert.set("")
 
     def calculate_total_price(self):
@@ -220,16 +221,15 @@ class supplierClass:
 
             if not result :
                 stock_quantity = self.var_qntty.get()
-                stock_price = float(stock_quantity) * float(salepr) + float(stock_quantity) * float(salepr) * (
-                        int(dpd) / 100)
+                stock_price = float(stock_quantity) * float(salepr) + float(stock_quantity) * float(salepr) * (int(dpd) / 100)
                 # Insert the new product into the inventory
                 insert_query = "INSERT INTO inventory (prod_id, prd_name, purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-                insert_values = (prid , prname , pprice , salepr , stock_quantity , stock_price , int(dpd) , alrt)
+                insert_values = (prid , prname , pprice , salepr , stock_quantity , stock_price , dpd , alrt)
                 self.cursor.execute(insert_query , insert_values)
                 self.db.commit()
             else :
                 # If the product already exists, update its details
-                update_query = "UPDATE inventory SET prd_name = %s, purchase_per_unit = %s, sale_per_unit = %s, stock_quantity = stock_quantity + %s, stock_price = stock_price + %s + %s * %s, GST = %s, low_stk_alert = %s WHERE prod_id = %s"
+                update_query = "UPDATE inventory SET prd_name = %s, purchase_per_unit = %s, sale_per_unit = %s, stock_quantity = %s, stock_price = %s, GST = %s, low_stk_alert = %s WHERE prod_id = %s"
                 # Fetching initial stock quantity from the inventory
                 query = "SELECT stock_quantity FROM inventory WHERE prod_id = %s"
                 self.cursor.execute(query , (prid ,))
@@ -244,8 +244,7 @@ class supplierClass:
 
             # Inserting data into the supplier table
             query = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price, low_stockalert, purchase_month) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            values = (
-            spname , mobino , prid , prname , pprice , qntty , salepr , int(dpd) , ttpr , alrt , datetime.now().month)
+            values = (spname , mobino , prid , prname , pprice , qntty , salepr , dpd , ttpr , alrt , datetime.now().month)
             self.cursor.execute(query , values)
             self.db.commit()
 
