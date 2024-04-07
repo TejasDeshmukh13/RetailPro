@@ -3,6 +3,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import ttk, messagebox
 import mysql.connector
+import subprocess
 
 class supplierClass:
     def __init__(self, root):
@@ -15,7 +16,7 @@ class supplierClass:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="root",
+            password="D@zypiyu123",
             database="retailers",
             port=3306
         )
@@ -47,9 +48,18 @@ class supplierClass:
         lbl_search.place(x=300, y=450)
 
         txt_search = Entry(self.root, textvariable=self.var_searchtxt, font=("goudy old style", 15), bg="lightyellow")
-        txt_search.place(x=500, y=450)
-        btn_search = Button(self.root, text="Search", command=self.check_prod_id, font=("goudy old style", 15), bg="#0f4d7d", fg="white")
+        btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
+                          command=self.dashboard, cursor="hand2")
+        btn_back.place(x=1050, y=20, width=80, height=25)
+
+        btn_search = Button(self.root, text="Search", command=self.search_product, font=("goudy old style", 15),
+                            bg="#0f4d7d", fg="white")
         btn_search.place(x=750, y=450, width=90)
+        btn_showall = Button(self.root, text="ALL", font=("goudy old style", 15),
+                             bg="#0f4d7d", fg="white", command=self.show_all_data)
+        btn_showall.place(x=900, y=450, width=90)
+
+
 
         # ====title======
         title = Label(self.root, text="SUPPLIER DETAILS", font=("goudy old style", 15), bg="#0f4d7d", fg="white")
@@ -121,6 +131,7 @@ class supplierClass:
         btn_calculate.place(x=580, y=400, width=120, height=28)
         btn_check_id = Button(self.root, text="Check", font=("goudy old style", 12), bg="#4caf50", fg="white", cursor="hand2", command=self.check_prod_id)
         btn_check_id.place(x=850, y=180, width=60, height=25)
+
         # ====================Supplier Details=================
         supp_frame = Frame(self.root, bd=3, relief=RIDGE)
         supp_frame.place(x=0, y=500, relwidth=1, height=400)
@@ -129,10 +140,14 @@ class supplierClass:
         scrollX = Scrollbar(supp_frame, orient=HORIZONTAL)
 
         self.SupplierTable = ttk.Treeview(supp_frame, column=("sname", "smobile", "ppid", "pname", "pprice", "qnty", "sprice", "gst", "tprice"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
+        scrolly = Scrollbar(supp_frame, orient=VERTICAL, command=self.SupplierTable.yview)
+        scrollX = Scrollbar(supp_frame, orient=HORIZONTAL, command=self.SupplierTable.xview)
+
+        self.SupplierTable.configure(yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
+
         scrollX.pack(side=BOTTOM, fill=X)
         scrolly.pack(side=RIGHT, fill=Y)
-        scrollX.config(command=self.SupplierTable.xview)
-        scrolly.config(command=self.SupplierTable.yview)
+
         self.SupplierTable.heading("sname", text="Supplier Name")
         self.SupplierTable.heading("smobile", text="Supplier mobile no")
         self.SupplierTable.heading("ppid", text="Product ID")
@@ -166,6 +181,8 @@ class supplierClass:
         # Insert data into the Treeview
         for row in data:
             self.SupplierTable.insert("", "end", values=row)
+
+
 
     def clear_data(self):
         # Clearing text in entry widgets
@@ -261,6 +278,42 @@ class supplierClass:
             7 : 'Jul' , 8 : 'Aug' , 9 : 'Sep' , 10 : 'Oct' , 11 : 'Nov' , 12 : 'Dec'
         }
         return month_abbr.get(month_number , '')
+
+    def display_matched_product_details(self, product_details):
+        # Clear the existing rows in the Treeview
+        for row in self.SupplierTable.get_children():
+            self.SupplierTable.delete(row)
+
+        # Insert data into the Treeview
+        self.SupplierTable.insert("", "end", values=product_details)
+
+    def search_product(self):
+        try:
+            product_id = self.var_searchtxt.get()
+
+            # Fetching all data from the database based on the entered product ID
+            query = "SELECT supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price FROM supplier where product_id=%s"
+            self.cursor.execute(query, (product_id,))
+            data = self.cursor.fetchall()
+
+            if data:
+                # Clear the existing rows in the Treeview
+                for row in self.SupplierTable.get_children():
+                    self.SupplierTable.delete(row)
+
+                # Insert all fetched data into the Treeview
+                for row in data:
+                    self.SupplierTable.insert("", "end", values=row)
+
+                messagebox.showinfo("Found", f"Data found for Product ID: {product_id}")
+            else:
+                messagebox.showerror("Not Found", f"No data found for Product ID: {product_id}")
+        except Exception as e:
+            messagebox.showerror("Fetching Error", f"Error fetching data: {str(e)}")
+
+    def show_all_data(self):
+            self.update_treeview()
+
     def check_prod_id(self):
         try:
             product_id = self.var_ppid.get()
@@ -289,6 +342,9 @@ class supplierClass:
         except Exception as e:
             messagebox.showerror("Fetching Error", f"Error fetching data: {str(e)}")
 
+    def dashboard(self):
+        self.root.destroy()
+        subprocess.run(['python', 'dashboard.py'])
 
 root = Tk()
 obj = supplierClass(root)
