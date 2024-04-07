@@ -53,7 +53,7 @@ class supplierClass:
 
         # ====title======
         title = Label(self.root, text="SUPPLIER DETAILS", font=("goudy old style", 15), bg="#0f4d7d", fg="white")
-        title.place(x=50, y=100, width=1000)
+        title.place(x=50, y=100, width=1150)
 
         # =======content=========
         # ==========row1==========
