@@ -44,10 +44,14 @@ class supplierClass:
 
         # ===================searchFrame========
         # ==========option========
+
+
+        txt_search = Entry(self.root, textvariable=self.var_searchtxt, font=("goudy old style", 15), bg="lightyellow")
+        txt_search.place(x=500, y=450, width=180)
+
         lbl_search = Label(self.root, text="Search by Product Id.", bg="white", font=("goudy old style", 15))
         lbl_search.place(x=300, y=450)
 
-        txt_search = Entry(self.root, textvariable=self.var_searchtxt, font=("goudy old style", 15), bg="lightyellow")
         btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
                           command=self.dashboard, cursor="hand2")
         btn_back.place(x=1050, y=20, width=80, height=25)
