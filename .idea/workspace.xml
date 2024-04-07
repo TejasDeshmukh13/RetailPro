@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="5/4/24">
-      <change beforePath="$PROJECT_DIR$/Inventory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Inventory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/supplier.py" beforeDir="false" afterPath="$PROJECT_DIR$/supplier.py" afterDir="false" />
+    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="done">
+      <change afterPath="$PROJECT_DIR$/customercopy.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dashboardcopy.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inventorycop.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/salescop.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/suppliercopy.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,19 +51,21 @@
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Python.Inventory.executor&quot;: &quot;Run&quot;,
     &quot;Python.customer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.customercopy.executor&quot;: &quot;Run&quot;,
     &quot;Python.dashboard.executor&quot;: &quot;Run&quot;,
     &quot;Python.graph1-1.executor&quot;: &quot;Run&quot;,
     &quot;Python.login.executor&quot;: &quot;Run&quot;,
     &quot;Python.prdstatus.executor&quot;: &quot;Run&quot;,
     &quot;Python.sales.executor&quot;: &quot;Run&quot;,
     &quot;Python.supplier.executor&quot;: &quot;Run&quot;,
+    &quot;Python.suppliercopy.executor&quot;: &quot;Run&quot;,
     &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;Python.testsupplier.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Tejas Deshmukh/Downloads/graph1-1.py&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Tejas Deshmukh/Documents/Py Project/RetailPro&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;settings.codegpt&quot;
   }
 }</component>
@@ -140,7 +146,55 @@
       <option name="project" value="LOCAL" />
       <updated>1712328578283</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="5/4/24">
+      <option name="closed" value="true" />
+      <created>1712485819789</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1712485819790</updated>
+    </task>
+    <task id="LOCAL-00006" summary="5/4/24">
+      <option name="closed" value="true" />
+      <created>1712486364433</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1712486364433</updated>
+    </task>
+    <task id="LOCAL-00007" summary="5/4/24">
+      <option name="closed" value="true" />
+      <created>1712486420592</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1712486420592</updated>
+    </task>
+    <task id="LOCAL-00008" summary="done half check in your">
+      <option name="closed" value="true" />
+      <created>1712486454529</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1712486454529</updated>
+    </task>
+    <task id="LOCAL-00009" summary="done">
+      <option name="closed" value="true" />
+      <created>1712487575790</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1712487575790</updated>
+    </task>
+    <task id="LOCAL-00010" summary="done">
+      <option name="closed" value="true" />
+      <created>1712492773402</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1712492773402</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -160,6 +214,8 @@
     <MESSAGE value="sales page" />
     <MESSAGE value="sales page done without pie chart decision taken by me" />
     <MESSAGE value="5/4/24" />
-    <option name="LAST_COMMIT_MESSAGE" value="5/4/24" />
+    <MESSAGE value="done half check in your" />
+    <MESSAGE value="done" />
+    <option name="LAST_COMMIT_MESSAGE" value="done" />
   </component>
 </project>
