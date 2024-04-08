@@ -17,7 +17,7 @@ class customerClass:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="root",
+            password="D@zypiyu123",
             database="retailers",
             port=3306
         )
@@ -66,8 +66,12 @@ class customerClass:
 
         # Row 2
         lbl_cname = Label(
-            self.root, text="Cust Name", font=("goudy old style", 15), bg="white")
+            self.root, text="GST", font=("goudy old style", 15), bg="white")
         lbl_cname.place(x=50, y=220)
+        options = ["0", "5", "12", "18", "28"]  # GST rate
+        txt_cname = ttk.Combobox(self.root, textvariable=self.var_cname, values=options, font=("goudy old style", 15),
+                                background="lightyellow")
+        txt_cname.place(x=150, y=220, width=180)
         lbl_amount = Label(
             self.root, text="Total Amount", font=("goudy old style", 15), bg="white")
         lbl_amount.place(x=350, y=220)
@@ -75,9 +79,7 @@ class customerClass:
             self.root, text="Sale Price ", font=("goudy old style", 15), bg="white")
         lbl_sale.place(x=700, y=220)
 
-        txt_cname = Entry(
-            self.root, textvariable=self.var_cname, font=("goudy old style", 15), bg="lightyellow")
-        txt_cname.place(x=150, y=220, width=180)
+
         txt_amount = Entry(
             self.root, textvariable=self.var_amount, font=("goudy old style", 15), bg="lightyellow")
         txt_amount.place(x=500, y=220, width=180)
@@ -97,7 +99,7 @@ class customerClass:
         btn_back.place(x=1050, y=20, width=80, height=25)
         btn_check = Button(self.root, text="check", font=("goudy old style", 10), bg="blue", fg="white",
                            cursor="hand2", command=self.search_data)
-        btn_check.place(x=150, y=185, width=80, height=25)
+        btn_check.place(x=585, y=185, width=80, height=25)
         btn_calculate = Button(self.root, text="CALCULATE", command=self.calculate_total, font=(
             "goudy old style", 15), bg="deep sky blue", fg="white", cursor="hand2")
         btn_calculate.place(x=520, y=305, width=120, height=28)
@@ -117,7 +119,7 @@ class customerClass:
         self.CustomerTable.heading("Cid", text="Product ID")
         self.CustomerTable.heading("Pname", text="Product Name")
         self.CustomerTable.heading("quantity", text="Product quantity")
-        self.CustomerTable.heading("Cname", text="Customer Name")
+        self.CustomerTable.heading("Cname", text="GST")
         self.CustomerTable.heading("Amount", text="Total Amount")
         self.CustomerTable.heading("Sale", text="Sale Price")
         self.CustomerTable["show"] = "headings"
@@ -146,7 +148,7 @@ class customerClass:
             sale_price = self.var_sale.get()
 
             # Inserting data into the database
-            query = "INSERT INTO customer (product_id, product_name, product_quantity, cust_name, total_amount, sale_price, sale_month) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            query = "INSERT INTO customer (product_id, product_name, product_quantity, GST, total_amount, sale_price, sale_month) VALUES (%s, %s, %s, %s, %s, %s, %s)"
             values = (product_id, product_name, quantity, cust_name,total_amount, sale_price, datetime.now().month)
 
             self.cursor.execute(query, values)
@@ -164,7 +166,7 @@ class customerClass:
             self.CustomerTable.delete(item)
 
         # Fetch all rows from the database
-        query = "SELECT * FROM customer"
+        query = "SELECT product_id, product_name, product_quantity, GST, total_amount, sale_price, sale_month FROM customer"
         self.cursor.execute(query)
         data = self.cursor.fetchall()
 
@@ -181,28 +183,28 @@ class customerClass:
 
     def search_data(self):
         try:
-            product_id = self.var_cust_id.get()
+            product_name = self.var_pname.get()
 
             # Fetching data from the database based on the entered product ID
-            query = "SELECT prd_name, sale_per_unit FROM inventory WHERE prod_id = %s"
-            self.cursor.execute(query, (product_id,))
+            query = "SELECT prod_id, sale_per_unit FROM inventory WHERE prd_name = %s"
+            self.cursor.execute(query, (product_name,))
             data = self.cursor.fetchone()
 
             if data:
                 messagebox.showinfo(
-                    "Found", f"Data found for Product ID: {product_id}")
+                    "Found", f"Data found for Product name: {product_name}")
                 # Data found for the product ID
                 product_name, sale_price = data
 
                 # Update the corresponding text fields with the retrieved data
-                self.var_pname.set(product_name)
+                self.var_cust_id.set(product_name)
                 self.var_sale.set(sale_price)
                 return True
 
             else:
                 # No data found for the product ID
                 messagebox.showinfo(
-                    "Not Found", f"No data found for Product ID: {product_id}")
+                    "Not Found", f"No data found for Product name: {product_name}")
                 return False
 
         except Exception as e:
