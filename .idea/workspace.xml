@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="sales done">
-      <change afterPath="$PROJECT_DIR$/prdstatuscop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="sales done prdstatus added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customercopy.py" beforeDir="false" afterPath="$PROJECT_DIR$/customercopy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboardcopy.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboardcopy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventorycop.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventorycop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/salescop.py" beforeDir="false" afterPath="$PROJECT_DIR$/salescop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/suppliercopy.py" beforeDir="false" afterPath="$PROJECT_DIR$/suppliercopy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Inventory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Inventory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prdstatus.py" beforeDir="false" afterPath="$PROJECT_DIR$/prdstatus.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -250,7 +245,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712586522987</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="sales done prdstatus added">
+      <option name="closed" value="true" />
+      <created>1712586786676</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1712586786676</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -275,6 +278,7 @@
     <MESSAGE value="done and uploading copies" />
     <MESSAGE value="." />
     <MESSAGE value="sales done" />
-    <option name="LAST_COMMIT_MESSAGE" value="sales done" />
+    <MESSAGE value="sales done prdstatus added" />
+    <option name="LAST_COMMIT_MESSAGE" value="sales done prdstatus added" />
   </component>
 </project>
