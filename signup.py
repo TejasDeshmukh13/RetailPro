@@ -123,9 +123,6 @@ class LoginPage:
         # ========= show/hide password ==================================================================
         
 
-    
-
-    
         self.email_label = Label(self.lgn_frame, text="Email_Id", bg="#ADD8E6", fg="#4f4e4d",
                                     font=("yu gothic ui", 13, "bold"))
         self.email_label.place(x=550, y=400)
