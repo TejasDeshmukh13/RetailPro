@@ -52,7 +52,7 @@ class InventoryClass:
         scrolly = Scrollbar(inventory_frame, orient=VERTICAL)
         scrollX = Scrollbar(inventory_frame, orient=HORIZONTAL)
 
-        self.InventoryTable = ttk.Treeview(inventory_frame, columns=("prd_id", "prd_name", "purchase_per_unit", "sale_per_unit", "stk_quantity", "stock_price", "GST", "low_stk_alert"))
+        self.InventoryTable = ttk.Treeview(inventory_frame, columns=("prd_id", "prd_name", "stk_quantity","low_stk_alert"))
         scrollX.pack(side=BOTTOM, fill=X)
         scrolly.pack(side=RIGHT, fill=Y)
         scrollX.config(command=self.InventoryTable.xview)
@@ -60,11 +60,7 @@ class InventoryClass:
 
         self.InventoryTable.heading("prd_id", text="Product Id")
         self.InventoryTable.heading("prd_name", text="Product Name")
-        self.InventoryTable.heading("purchase_per_unit", text="Purchase Price")
-        self.InventoryTable.heading("sale_per_unit", text="Sale Price")
         self.InventoryTable.heading("stk_quantity", text="Stock Quantity")
-        self.InventoryTable.heading("stock_price", text="Stock Price")
-        self.InventoryTable.heading("GST", text="GST Rate%")
         self.InventoryTable.heading("low_stk_alert", text="Low Stock ")
 
         self.InventoryTable["show"] = "headings"
@@ -77,7 +73,7 @@ class InventoryClass:
 
     def showdata(self):
         # fetch data from db
-        query = "SELECT * FROM inventory"
+        query = "SELECT `prod_id`, `prd_name`,`stock_quantity`, `low_stk_alert` FROM inventory"
         self.cursor.execute(query)
         data = self.cursor.fetchall()
 
@@ -100,7 +96,7 @@ class InventoryClass:
         if item:
             values = self.InventoryTable.item(item, "values")
             prd_status_window = Toplevel(self.root)
-            obj = PrdStatusClass(prd_status_window, values[0])  # Pass the product ID as a string to the PrdStatusClass constructor
+            obj = PrdStatusClass(prd_status_window, values[0])  # Passing the product ID as a string to the PrdStatusClass constructor
 
 class PrdStatusClass:
     def __init__(self, root, product_id):
@@ -139,25 +135,26 @@ class PrdStatusClass:
 
         # ====labels&entry====
         lbl_productid = Label(self.root, text="Product ID", font=("goudy old style", 15), bg="#ADD8E6").place(x=50, y=150)
-        lbl_productid = Label(self.root, textvariable = self.var_prd_id, font=("goudy old style", 15), bg="lightyellow").place(x=190, y=150, width=200)
+        val_productid = Label(self.root, textvariable = self.var_prd_id, font=("goudy old style", 15), bg="lightyellow").place(x=190, y=150, width=200)
 
         lbl_pname = Label(self.root, text="Product Name", font=("goudy old style", 15), bg="#ADD8E6").place(x=50, y=220)
-        lbl_pname = Label(self.root, textvariable = self.var_prd_name, font=("goudy old style", 15), bg="lightyellow").place(x=190, y=220, width=200)
+        val_pname = Label(self.root, textvariable = self.var_prd_name, font=("goudy old style", 15), bg="lightyellow").place_configure(x=190, y=220, width=200,relwidth = 0.1)
+
 
         lbl_price = Label(self.root, text="Sales Price", font=("goudy old style", 15), bg="#ADD8E6").place(x=50, y=290)
-        lbl_price = Label(self.root, textvariable = self.var_sale_price, font=("goudy old style", 15), bg="lightyellow").place(x=190, y=290, width=200)
+        val_price = Label(self.root, textvariable = self.var_sale_price, font=("goudy old style", 15), bg="lightyellow").place(x=190, y=290, width=200)
 
         lbl_pprice = Label(self.root, text="Purchase Price", font=("goudy old style", 15), bg="#ADD8E6").place(x=50, y=370)
-        lbl_pprice = Label(self.root, textvariable = self.var_pur_price, font=("goudy old style", 15), bg="lightyellow").place(x=190, y=370, width=200)
+        val_pprice = Label(self.root, textvariable = self.var_pur_price, font=("goudy old style", 15), bg="lightyellow").place(x=190, y=370, width=200)
 
-        lbl_value = Label(self.root, text="Stock value", font=("goudy old style", 15), bg="#ADD8E6").place(x=600, y=150)
-        lbl_value = Label(self.root, textvariable = self.var_stk_price, font=("goudy old style", 15), bg="lightyellow").place(x=750, y=150, width=200)
+        lbl_stkvalue = Label(self.root, text="Stock value", font=("goudy old style", 15), bg="#ADD8E6").place(x=600, y=150)
+        val_stkvalue = Label(self.root, textvariable = self.var_stk_price, font=("goudy old style", 15), bg="lightyellow").place(x=750, y=150, width=200)
 
         lbl_qnty = Label(self.root, text="Stock Quantity", font=("goudy old style", 15), bg="#ADD8E6").place(x=600, y=220)
-        lbl_qnty = Label(self.root, textvariable = self.var_stk_quantity, font=("goudy old style", 15), bg="lightyellow").place(x=750, y=220, width=200)
+        val_qnty = Label(self.root, textvariable = self.var_stk_quantity, font=("goudy old style", 15), bg="lightyellow").place(x=750, y=220, width=200)
 
         lbl_alert = Label(self.root, text="Low Stock Alert", font=("goudy old style", 15), bg="#ADD8E6").place(x=600, y=290)
-        txt_alert = Label(self.root, textvariable = self.var_low_stk_alert, font=("goudy old style", 15), bg="lightyellow").place(x=750, y=290, width=100)
+        val_alert = Label(self.root, textvariable = self.var_low_stk_alert, font=("goudy old style", 15), bg="lightyellow").place(x=750, y=290, width=100)
 
         # ====buttons====
         btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white", command=self.inventory, cursor="hand2").place(x=1050, y=20, width=80, height=25)
