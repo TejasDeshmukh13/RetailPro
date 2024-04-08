@@ -53,8 +53,8 @@ class SalesClass(Tk):
         NavigationToolbar2Tk(self.figure_canvas_purchase, self)
 
     def load_data(self) :
-        query_purchase = "SELECT `total_price`, `purchase_month` FROM `supplier`"
-        query_sales = "SELECT `total_amount`, `sale_month` FROM `customer`"
+        query_purchase = "SELECT `sum(total_price)`, `purchase_month` FROM `supplier`"
+        query_sales = "SELECT 'sum(total_amount)`, `sale_month` FROM `customer`"
 
         # Fetch all data and initialize the lists with zeros for all months
         self.list_y_purchase = [0] * 12
