@@ -40,7 +40,7 @@ class customerClass:
         # Title
         title = Label(self.root, text="CUSTOMER DETAILS", font=(
             "goudy old style", 15), bg="#0f4d7d", fg="white")
-        title.place(x=0, y=100, width=1150)
+        title.place(x=30, y=100, width=1050)
 
         # Content
         # Row 1
@@ -91,7 +91,7 @@ class customerClass:
         btn_add.place(x=350, y=305, width=120, height=28)
         btn_clear = Button(self.root, text="CLEAR", font=("goudy old style", 15), bg="#607d8b", fg="white",
                            cursor="hand2", command=self.clear_data)
-        btn_clear.place(x=600, y=305, width=120, height=28)
+        btn_clear.place(x=700, y=305, width=120, height=28)
         btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
                           command=self.dashboard, cursor="hand2")
         btn_back.place(x=1050, y=20, width=80, height=25)
@@ -100,7 +100,7 @@ class customerClass:
         btn_check.place(x=150, y=185, width=80, height=25)
         btn_calculate = Button(self.root, text="CALCULATE", command=self.calculate_total, font=(
             "goudy old style", 15), bg="deep sky blue", fg="white", cursor="hand2")
-        btn_calculate.place(x=475, y=305, width=120, height=28)
+        btn_calculate.place(x=520, y=305, width=120, height=28)
 
         # Customer Details
         cust_frame = Frame(self.root, bd=3, relief=RIDGE)
@@ -109,8 +109,7 @@ class customerClass:
         scrolly = Scrollbar(cust_frame, orient=VERTICAL)
         scrollX = Scrollbar(cust_frame, orient=HORIZONTAL)
 
-        self.CustomerTable = ttk.Treeview(cust_frame, column=(
-            "Cid", "Pname", "quantity", "Cname", "Amount", "Sale"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
+        self.CustomerTable = ttk.Treeview(cust_frame, column=("Cid", "Pname", "quantity", "Cname", "Amount", "Sale"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
         scrollX.pack(side=BOTTOM, fill=X)
         scrolly.pack(side=RIGHT, fill=Y)
         scrollX.config(command=self.CustomerTable.xview)

@@ -80,7 +80,12 @@ class invetnoryClass:
         self.InventoryTable=ttk.Treeview(inventory_frame,
                                          columns=("prd_id",
                                                   "prd_name",
-                                                  "stk_quantity")
+                                                  "purchase_per_unit",
+                                                  "sale_per_unit",
+                                                  "stk_quantity",
+                                                  "stock_price",
+                                                  "GST",
+                                                  "low_stk_alert")
                                          )
         scrollX.pack(side=BOTTOM,fill=X)
         scrolly.pack(side=RIGHT,fill=Y)
@@ -89,7 +94,12 @@ class invetnoryClass:
 
         self.InventoryTable.heading("prd_id",text="Product Id")
         self.InventoryTable.heading("prd_name",text="Product Name")
+        self.InventoryTable.heading("purchase_per_unit" , text = "Purchase Price")
+        self.InventoryTable.heading("sale_per_unit" , text = "Sale Price")
         self.InventoryTable.heading("stk_quantity", text="Stock Quantity")
+        self.InventoryTable.heading("stock_price" , text = "Stock Price")
+        self.InventoryTable.heading("GST" , text = "GST Rate%")
+        self.InventoryTable.heading("low_stk_alert" , text = "Low Stock ")
 
         self.InventoryTable["show"]="headings"
         self.InventoryTable.pack(fill="both",
@@ -99,7 +109,7 @@ class invetnoryClass:
 
     def showdata(self):
         #fetch data from db
-        query="SELECT prod_id,prd_name,stock_quantity FROM inventory"
+        query="SELECT * FROM inventory"
         self.cursor.execute(query)
         data = self.cursor.fetchall()
 

@@ -48,12 +48,7 @@ class Expentory:
 			bd=5,
 			cursor="hand1"
 		).place(x=20, y=30)
-		Button(width=7, pady=0, text='Settings', bg='light blue', fg='black', border=3,
-		       font=("times new roman", 15, "bold"),
-		       ).place(x=1240, y=20)
-		Button(width=7, pady=0, text='About Us', bg='light blue', fg='black', border=3,
-		       font=("times new roman", 15, "bold"),
-		       ).place(x=1135, y=20)
+
 
 		btn_supplier = Button(
 			Menu,
@@ -90,6 +85,7 @@ class Expentory:
 			text="Sales",
 			image=self.icon_side,
 			compound=LEFT,
+			command = self.sales,
 			padx=3,
 			anchor="w",
 			font=("times new roman", 20, "bold"),
@@ -129,8 +125,9 @@ class Expentory:
 		self.root.destroy()
 		subprocess.run(['python', 'inventory.py'])
 
-
+	def sales(self):
+		self.root.destroy()
+		subprocess.run(['python', 'sales.py'])
 root = Tk()
 obj = Expentory(root)
-
 root.mainloop()
