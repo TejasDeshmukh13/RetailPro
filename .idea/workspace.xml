@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="changes">
-      <change beforePath="$PROJECT_DIR$/.idea/RetailPro.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RetailPro.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LoginPage.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventorycop.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventorycop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reg.py" beforeDir="false" afterPath="$PROJECT_DIR$/reg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signup.py" beforeDir="false" afterPath="$PROJECT_DIR$/signup.py" afterDir="false" />
-    </list>
+    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="loginsignup" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -67,7 +59,6 @@
     "Python.customercopy.executor": "Run",
     "Python.dashboard.executor": "Run",
     "Python.graph1-1.executor": "Run",
-    "Python.inventorycop.executor": "Run",
     "Python.login.executor": "Run",
     "Python.prdstatus.executor": "Run",
     "Python.prdstatuscop.executor": "Run",
@@ -86,6 +77,35 @@
     "settings.editor.selected.configurable": "settings.codegpt"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="RetailPro" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -222,31 +242,23 @@
       <option name="project" value="LOCAL" />
       <updated>1712586522987</updated>
     </task>
-    <task id="LOCAL-00016" summary="sales done prdstatus added">
+    <task id="LOCAL-00016" summary="check">
       <option name="closed" value="true" />
-      <created>1712586786676</created>
+      <created>1712591867330</created>
       <option name="number" value="00016" />
       <option name="presentableId" value="LOCAL-00016" />
       <option name="project" value="LOCAL" />
-      <updated>1712586786676</updated>
+      <updated>1712591867331</updated>
     </task>
-    <task id="LOCAL-00017" summary="prdstatus done in inventor">
+    <task id="LOCAL-00017" summary="loginsignup">
       <option name="closed" value="true" />
-      <created>1712590571727</created>
+      <created>1712593559774</created>
       <option name="number" value="00017" />
       <option name="presentableId" value="LOCAL-00017" />
       <option name="project" value="LOCAL" />
-      <updated>1712590571727</updated>
+      <updated>1712593559775</updated>
     </task>
-    <task id="LOCAL-00018" summary="inventory done">
-      <option name="closed" value="true" />
-      <created>1712591422931</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1712591422931</updated>
-    </task>
-    <option name="localTasksCounter" value="19" />
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -271,9 +283,8 @@
     <MESSAGE value="done and uploading copies" />
     <MESSAGE value="." />
     <MESSAGE value="sales done" />
-    <MESSAGE value="sales done prdstatus added" />
-    <MESSAGE value="prdstatus done in inventor" />
-    <MESSAGE value="inventory done" />
-    <option name="LAST_COMMIT_MESSAGE" value="inventory done" />
+    <MESSAGE value="check" />
+    <MESSAGE value="loginsignup" />
+    <option name="LAST_COMMIT_MESSAGE" value="loginsignup" />
   </component>
 </project>
