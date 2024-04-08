@@ -1,146 +1,195 @@
 from tkinter import *
-from PIL import ImageTk, Image
-import os
 from PIL import Image, ImageTk
-from tkinter import Label, Tk
+from tkinter import ttk, messagebox
+import mysql.connector
+import subprocess
 
-class LoginPage:
-    def __init__(self, window):
-        self.window = window
-        self.window.geometry('1300x700')
-        self.window.resizable(1, 1)
-        
-        self.window.title('Login Page')
+class regClass:
+    def __init__(self, root):
+        self.root = root
+        self.db = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="root",
+            database="retailers",
+            port=3306
+        )
 
-        # ========================================================================
-        # ============================background image============================
-        # ========================================================================
-        
-        # ====== Login Frame =========================
-        self.lgn_frame = Frame(self.window, bg='#001f3f', width=1000, height=800)
-        self.lgn_frame.place(x=150, y=50)
-        
-        # ========================================================================
-        # ========================================================
-        # ========================================================================
-        self.txt = "WELCOME TO RETAIL PRO"
-        self.heading = Label(self.lgn_frame, text=self.txt, font=('yu gothic ui', 25, "bold"), bg="#040405",
-                             fg='white',
-                             bd=5,
-                             relief=FLAT)
-        self.heading.place(x=80, y=30, width=500, height=30)
+        self.cursor = self.db.cursor()
 
-        # ========================================================================
-        # ============ Left Side Image ================================================
-        # ========================================================================
-        self.side_image = Image.open('images\\left.jpg')
-        photo = ImageTk.PhotoImage(self.side_image.resize((350, 370)))
-        self.side_image_label = Label(self.lgn_frame, image=photo, bg='white')
-        self.side_image_label.image = photo
-        self.side_image_label.place(x=60, y=150)
+    def signup(self):
+        try:
+            username = user.get()
+            email_id = email.get()
+            mobile_no = mobile.get()
+            password = enter_code.get()
+            confirm_password = confirm_code.get()
 
-        # ========================================================================
-        # ============ Sign In Image =============================================
-        # ========================================================================
-        self.sign_in_image = Image.open('images\\hyy.png')
-        photo = ImageTk.PhotoImage(self.sign_in_image)
-        self.sign_in_image_label = Label(self.lgn_frame, image=photo, bg='#040405')
-        self.sign_in_image_label.image = photo
-        self.sign_in_image_label.place(x=620, y=80)
+            if not all([username, email_id, mobile_no, password, confirm_password]):
+                messagebox.showerror("Error", "Please fill in all fields.")
+                return
 
-        # ========================================================================
-        # ============ Sign In label =============================================
-        # ========================================================================
-        self.sign_in_label = Label(self.lgn_frame, text="Sign up", bg="#070805", fg="white",
-                                    font=("yu gothic ui", 17, "bold"))
-        self.sign_in_label.place(x=650, y=190)
+            if password != confirm_password:
+                messagebox.showerror("Error", "Password and Confirm Password do not match.")
+                return
 
-        # ========================================================================
-        # ============================username====================================
-        # ========================================================================
-        self.username_label = Label(self.lgn_frame, text="Name", bg="#ADD8E6", fg="#4f4e4d",
-                                    font=("yu gothic ui", 13, "bold"))
-        self.username_label.place(x=550, y=250)
+            query = "INSERT INTO login (username, emailid, mobile_no, password) VALUES (%s, %s, %s, %s)"
+            values = (username, email_id, mobile_no, password)
 
-        self.username_entry = Entry(self.lgn_frame, highlightthickness=0, relief=FLAT, bg="#ADD8E6", fg="#6b6a69",
-                                    font=("yu gothic ui ", 12, "bold"), insertbackground = '#6b6a69')
-        self.username_entry.place(x=650, y=250, width=200)
+            self.cursor.execute(query, values)
+            self.db.commit()
 
-        self.username_line = Canvas(self.lgn_frame, width=200, height=2.0, bg="#ADD8E6", highlightthickness=0)
-        self.username_line.place(x=650, y=275)
-        # ===== Username icon =========
-        self.username_label = Label(self.lgn_frame, text="Mobile_No", bg="#ADD8E6", fg="#4f4e4d",
-                                    font=("yu gothic ui", 13, "bold"))
-        self.username_label.place(x=550, y=300)
+            messagebox.showinfo("Success", "Signup done!")
+            self.login()
 
-        self.username_entry = Entry(self.lgn_frame, highlightthickness=0, relief=FLAT, bg="#ADD8E6", fg="#6b6a69",
-                                    font=("yu gothic ui ", 12, "bold"), insertbackground = '#6b6a69')
-        self.username_entry.place(x=650, y=300, width=200)
+        except Exception as e:
+            messagebox.showerror("Error", f"Error: {str(e)}")
 
-        self.username_line = Canvas(self.lgn_frame, width=200, height=2.0, bg="#ADD8E6", highlightthickness=0)
-        self.username_line.place(x=650, y=325)
-
-        # ========================================================================
-        # ============================login button================================
-        # ========================================================================
-        self.lgn_button = Image.open('images\\btn1.png')
-        photo = ImageTk.PhotoImage(self.lgn_button)
-        self.lgn_button_label = Label(self.lgn_frame, image=photo, bg='#040405')
-        self.lgn_button_label.image = photo
-        self.lgn_button_label.place(x=550, y=450)
-        self.login = Button(self.lgn_button_label, text='SIGN UP', font=("yu gothic ui", 13, "bold"), width=25, bd=0,
-                            bg='#3047ff', cursor='hand2', activebackground='#3047ff', fg='white')
-        self.login.place(x=20, y=10)
-        # ========================================================================
-        # ============================Forgot password=============================
-        # ========================================================================
-        
-        # =========== Sign Up ==================================================
-        self.sign_button = Button(self.lgn_frame, text='Business registeration', font=("yu gothic ui", 11, "bold"),
-                                relief=FLAT, borderwidth=0, background="#001F3F", fg='white')
-        self.sign_button.place(x=570, y=590)
-
-        self.signup_img = ImageTk.PhotoImage(file='images\\register.png')
-        self.signup_button_label = Button(self.lgn_frame, image=self.signup_img, bg='#98a65d', cursor="hand2",
-                                          borderwidth=0, background="#040405", activebackground="#040405")
-        self.signup_button_label.place(x=670, y=555, width=111, height=35)
-
-        # ========================================================================
-        # ============================password====================================
-        # ========================================================================
-        self.password_label = Label(self.lgn_frame, text="Password", bg="#ADD8E6", fg="#4f4e4d",
-                                    font=("yu gothic ui", 13, "bold"))
-        self.password_label.place(x=550, y=350)
-
-        self.password_entry = Entry(self.lgn_frame, highlightthickness=0, relief=FLAT, bg="#ADD8E6", fg="#6b6a69",
-                                    font=("yu gothic ui", 12, "bold"), show="*", insertbackground = '#6b6a69')
-        self.password_entry.place(x=650, y=350, width=200)
-
-        self.password_line = Canvas(self.lgn_frame, width=200, height=2.0, bg="#ADD8E6", highlightthickness=0)
-        self.password_line.place(x=650, y=375)
-        # ======== Password icon ================
-     
-        # ========= show/hide password ==================================================================
-        
-
-        self.email_label = Label(self.lgn_frame, text="Email_Id", bg="#ADD8E6", fg="#4f4e4d",
-                                    font=("yu gothic ui", 13, "bold"))
-        self.email_label.place(x=550, y=400)
-
-        self.email_entry = Entry(self.lgn_frame, highlightthickness=0, relief=FLAT, bg="#ADD8E6", fg="#6b6a69",
-                                    font=("yu gothic ui ", 12, "bold"), insertbackground = '#6b6a69')
-        self.email_entry.place(x=650, y=400, width=200)
-
-        self.email_line = Canvas(self.lgn_frame, width=200, height=2.0, bg="#ADD8E6", highlightthickness=0)
-        self.email_line.place(x=650, y=420)
-        # ===== Username icon =========
-       
-
-def page():
-    window = Tk()
-    LoginPage(window)
-    window.mainloop()
+    def login(self):
+        self.root.destroy()
+        subprocess.run(['python', 'login.py'])
+    def clear_entries(self):
+        user.delete(0, 'end')
+        email.delete(0, 'end')
+        mobile.delete(0, 'end')
+        enter_code.delete(0, 'end')
+        confirm_code.delete(0, 'end')
 
 
-if __name__ == '__main__':
-    page()
+window = Tk()
+window.title("SignUp")
+window.geometry('925x550+300+200')
+window.config(bg='#fff')
+window.resizable(False, False)
+
+img = PhotoImage(file='login.png')
+Label(window, image=img, bg='white').place(x=50, y=100)
+
+frame = Frame(window, width=450, height=500, bg="white")
+frame.place(x=450, y=50)
+
+heading = Label(frame, text='SIGN UP', fg='#57a1f8', bg='white', font=('Microsoft YaHei UI', 23, 'bold'))
+heading.place(x=100, y=-5)
+
+
+###########------------------------
+def on_enter(e):
+    user.delete(0, 'end')
+
+
+def on_leave(e):
+    name = user.get()
+    if name == '':
+        user.insert(0, 'Username')
+
+
+user = Entry(frame, width=25, fg='black', border=0, bg="white", font=('Microsoft YaHei UI Light', 11))
+user.place(x=30, y=60)
+user.insert(0, 'Username')
+user.bind('<FocusIn>', on_enter)
+user.bind('<FocusOut>', on_leave)
+
+Frame(frame, width=295, height=2, bg='black').place(x=25, y=87)
+
+
+#########------------------
+def on_enter(e):
+    email.delete(0, 'end')
+
+
+def on_leave(e):
+    name = email.get()
+    if name == '':
+        email.insert(0, 'Email Id')
+
+
+email = Entry(frame, width=25, fg='black', border=0, bg="white", font=('Microsoft YaHei UI Light', 11))
+email.place(x=30, y=130)
+email.insert(0, 'Email Id')
+email.bind('<FocusIn>', on_enter)
+email.bind('<FocusOut>', on_leave)
+
+Frame(frame, width=295, height=2, bg='black').place(x=25, y=157)
+
+
+#########------------------
+def on_enter(e):
+    mobile.delete(0, 'end')
+
+
+def on_leave(e):
+    name = mobile.get()
+    if name == '':
+        mobile.insert(0, 'Mobile No')
+
+
+mobile = Entry(frame, width=25, fg='black', border=0, bg="white", font=('Microsoft YaHei UI Light', 11))
+mobile.place(x=30, y=200)
+mobile.insert(0, 'Mobile No')
+mobile.bind('<FocusIn>', on_enter)
+mobile.bind('<FocusOut>', on_leave)
+
+Frame(frame, width=295, height=2, bg='black').place(x=25, y=227)
+
+
+#########------------------
+def on_enter(e):
+    enter_code.delete(0, 'end')
+    enter_code.config(show='*')
+
+
+def on_leave(e):
+    name = enter_code.get()
+    if name == '':
+        enter_code.insert(0, 'Enter Password')
+        enter_code.config(show='')
+
+
+enter_code = Entry(frame, width=25, fg='black', border=0, bg="white", font=('Microsoft YaHei UI Light', 11))
+enter_code.place(x=30, y=270)
+enter_code.insert(0, 'Enter Password')
+enter_code.bind('<FocusIn>', on_enter)
+enter_code.bind('<FocusOut>', on_leave)
+
+Frame(frame, width=295, height=2, bg='black').place(x=25, y=297)
+
+
+#########------------------
+def on_enter(e):
+    confirm_code.delete(0, 'end')
+    confirm_code.config(show='*')
+
+
+def on_leave(e):
+    name = confirm_code.get()
+    if name == '':
+        confirm_code.insert(0, 'Confirm Password')
+        confirm_code.config(show='')
+
+confirm_code = Entry(frame, width=25, fg='black', border=0, bg="white", font=('Microsoft YaHei UI Light', 11))
+confirm_code.place(x=30, y=340)
+confirm_code.insert(0, 'Confirm Password')
+confirm_code.bind('<FocusIn>', on_enter)
+confirm_code.bind('<FocusOut>', on_leave)
+
+Frame(frame, width=295, height=2, bg='black').place(x=25, y=367)
+
+####################------------------------------
+
+reg_instance = regClass(window)  # Create an instance of the RegClass
+
+Button(frame, width=39, pady=7, text='SIGN UP', bg='#57a1f8', fg='white', border=0,
+       command=reg_instance.signup).place(x=35, y=400)
+
+label = Label(frame, text="I have an account?", fg='black', bg='white', font=('Microsoft YaHei UI Light', 9))
+label.place(x=95, y=440)
+
+def login():
+    window.destroy()
+    subprocess.run(['python', 'login.py'])
+sign_in = Button(frame, width=6, text='Sign in', border=0, bg='white', cursor='hand2', fg='#57a1f8',command=login)
+sign_in.place(x=215, y=440)
+
+
+
+window.mainloop()
