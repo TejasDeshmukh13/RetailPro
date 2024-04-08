@@ -1,3 +1,4 @@
+import subprocess
 from datetime import *
 from tkinter import *
 from PIL import Image, ImageTk
@@ -7,7 +8,7 @@ import mysql.connector
 class supplierClass:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("1150x600+220+130")
+        self.root.geometry("1150x640+220+130")
         self.root.title("RETAIL PRO")
         self.root.config(bg="white")
         self.root.focus_force()
@@ -119,8 +120,12 @@ class supplierClass:
 
         btn_calculate = Button(self.root, text="CALCULATE", font=("goudy old style", 15), bg="deep sky blue", fg="white", cursor="hand2", command=self.calculate_total_price)
         btn_calculate.place(x=580, y=400, width=120, height=28)
+
         btn_check_id = Button(self.root, text="Check", font=("goudy old style", 12), bg="#4caf50", fg="white", cursor="hand2", command=self.check_prod_id)
         btn_check_id.place(x=850, y=180, width=60, height=25)
+
+        btn_back = Button(self.root , text = "BACK" , font = ("goudy old style" , 10) , bg = "blue" , fg = "white" ,command = self.dashboard , cursor = "hand2")
+        btn_back.place(x = 1050 , y = 20 , width = 80 , height = 25)
         # ====================Supplier Details=================
         supp_frame = Frame(self.root, bd=3, relief=RIDGE)
         supp_frame.place(x=0, y=500, relwidth=1, height=400)
@@ -289,6 +294,9 @@ class supplierClass:
         except Exception as e:
             messagebox.showerror("Fetching Error", f"Error fetching data: {str(e)}")
 
+    def dashboard(self):
+        self.root.destroy()
+        subprocess.run(['python', 'dashboard.py'])
 
 root = Tk()
 obj = supplierClass(root)

@@ -109,8 +109,7 @@ class customerClass:
         scrolly = Scrollbar(cust_frame, orient=VERTICAL)
         scrollX = Scrollbar(cust_frame, orient=HORIZONTAL)
 
-        self.CustomerTable = ttk.Treeview(cust_frame, column=(
-            "Cid", "Pname", "quantity", "Cname", "Amount", "Sale"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
+        self.CustomerTable = ttk.Treeview(cust_frame, column=("Cid", "Pname", "quantity", "Cname", "Amount", "Sale"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
         scrollX.pack(side=BOTTOM, fill=X)
         scrolly.pack(side=RIGHT, fill=Y)
         scrollX.config(command=self.CustomerTable.xview)
