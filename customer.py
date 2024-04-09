@@ -212,10 +212,10 @@ class customerClass:
                 # Data found for the product ID
                 product_id, sale_price, stock_quantity,GST, low_stk_alert= data
 
-                if stock_quantity < low_stk_alert :
-                    messagebox.showwarning("Low Stock Alert" , f"Stock quantity has gone below the limit for Product {product_name}")
-                elif stock_quantity == 0 :
+                if stock_quantity == 0 :
                     messagebox.showwarning("Not In Stock" , "Product not present in stock! Please Refill!")
+                elif stock_quantity < low_stk_alert :
+                    messagebox.showwarning("Low Stock Alert" , f"Stock quantity has gone below the limit for Product {product_name}")
 
                 # Update the corresponding text fields with the retrieved data
                 self.var_cust_id.set(product_id)
