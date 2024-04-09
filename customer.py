@@ -171,9 +171,9 @@ class customerClass:
             self.update_treeview()  # Update the Treeview after saving
 
         except mysql.connector as e:
-	            messagebox.showerror("Error" , f"Database error: {e}")
+            messagebox.showerror("Error" , f"Database error: {e}")
         except Exception as e :
-	        messagebox.showerror("Error" , f"Error: {str(e)}")
+            messagebox.showerror("Error" , f"Error: {str(e)}")
 
     def update_treeview(self):
         # Clear the existing data in the Treeview
