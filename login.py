@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 from tkinter import ttk, messagebox
 import mysql.connector
 import subprocess
+from userprofile import UserProfile
 
 
 class loginClass:
@@ -11,7 +12,7 @@ class loginClass:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="D@zypiyu123",
+            password="root",
             database="retailers",
             port=3306
         )
@@ -27,29 +28,90 @@ class loginClass:
                 messagebox.showerror("Error", "Please enter both username and password.")
                 return
 
-            query = "SELECT * FROM login WHERE username = %s AND password = %s"
+            query = "SELECT username,password FROM login WHERE username = %s AND password = %s"
             values = (username, password)
 
             self.cursor.execute(query, values)
-            result = self.cursor.fetchone()
+            user_data = self.cursor.fetchone()
 
-            if result:
+            if user_data:
                 messagebox.showinfo("Success", "Login Successful!")
-                self.dashboard()# Add your code here for successful login
+                username = user_data[0]  # Extract user ID
+                self.dashboard()
+                self.display_user_profile(username)  # Pass user ID to display_user_profile method
             else:
                 messagebox.showerror("Error", "Invalid username or password.")
-
         except Exception as e:
             messagebox.showerror("Error", f"Error: {str(e)}")
 
+    def display_user_profile(self, username):
+        self.root.destroy()  # Close the login window
+        root = Tk()  # Create a new window
+        obj=UserProfile(root, username)  # Pass user ID to UserProfile class
+        root.mainloop()
+
     def dashboard(self):
-        self.root.destroy()
         subprocess.run(['python', 'dashboard.py'])
+
 root=Tk()
 root.title('login')
 root.geometry('925x500+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
+
+class UserProfile:
+	def __init__(self, root, username):
+		self.root = root
+		self.root.title("User Profile")
+		self.root.geometry("600x400")  # Increase frame size
+
+		try:
+			# Connect to MySQL database
+			self.db = mysql.connector.connect(
+				host="localhost",
+				user="root",
+				password="root",
+				database="retailers",
+				port=3306
+			)
+
+			# Fetch user data from the database
+			self.cursor = self.db.cursor()
+			query = "SELECT * FROM login WHERE username = %s"
+			self.cursor.execute(query, (username,))
+			user_data = self.cursor.fetchone()
+
+			# Display user profile information
+			if user_data:
+				self.display_profile(user_data)
+			else:
+				messagebox.showerror("Error", "User not found")
+				self.root.destroy()
+		except mysql.connector.Error as err:
+			messagebox.showerror("MySQL Error", f"Error: {err}")
+			self.root.destroy()
+
+	def display_profile(self, user_data):
+		# User profile frame
+		frame = Frame(self.root)
+		frame.pack(pady=20)  # Add some padding
+
+		# Load and display image
+		img = PhotoImage(file='hyy.png')
+		img_label = Label(frame, image=img)
+		img_label.image = img  # Keep a reference to the image to prevent garbage collection
+		img_label.pack()
+
+		# User profile labels with larger font
+		Label(frame, text="User Profile", font=("Helvetica", 24, "bold")).pack(pady=10)  # Larger font
+		Label(frame, text=f"Username: {user_data[0]}", font=("Helvetica", 16)).pack()  # Larger font
+		Label(frame, text=f"Email: {user_data[1]}", font=("Helvetica", 16)).pack()  # Larger font
+		Label(frame, text=f"Mobile: {user_data[2]}", font=("Helvetica", 16)).pack()  # Larger font
+        Bu
+def userprofile(self, username):
+        root = Tk()  # Create a new window for user profile
+        userprofile(root, username)  # Pass user ID to UserProfile class
+        root.mainloop()
 
 
 

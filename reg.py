@@ -4,7 +4,7 @@ import mysql.connector
 
 
 class UserProfile:
-	def __init__(self, root, user_id):
+	def __init__(self, root, username):
 		self.root = root
 		self.root.title("User Profile")
 		self.root.geometry("600x400")  # Increase frame size
@@ -14,7 +14,7 @@ class UserProfile:
 			self.db = mysql.connector.connect(
 				host="localhost",
 				user="root",
-				password="D@zypiyu123",
+				password="root",
 				database="retailers",
 				port=3306
 			)
@@ -22,7 +22,7 @@ class UserProfile:
 			# Fetch user data from the database
 			self.cursor = self.db.cursor()
 			query = "SELECT * FROM login WHERE username = %s"
-			self.cursor.execute(query, (user_id,))
+			self.cursor.execute(query, (username,))
 			user_data = self.cursor.fetchone()
 
 			# Display user profile information
@@ -48,15 +48,14 @@ class UserProfile:
 
 		# User profile labels with larger font
 		Label(frame, text="User Profile", font=("Helvetica", 24, "bold")).pack(pady=10)  # Larger font
-		Label(frame, text=f"Username: {user_data[1]}", font=("Helvetica", 16)).pack()  # Larger font
-		Label(frame, text=f"Email: {user_data[2]}", font=("Helvetica", 16)).pack()  # Larger font
-		Label(frame, text=f"Mobile: {user_data[3]}", font=("Helvetica", 16)).pack()  # Larger font
+		Label(frame, text=f"Username: {user_data[0]}", font=("Helvetica", 16)).pack()  # Larger font
+		Label(frame, text=f"Email: {user_data[1]}", font=("Helvetica", 16)).pack()  # Larger font
+		Label(frame, text=f"Mobile: {user_data[2]}", font=("Helvetica", 16)).pack()  # Larger font
 
 
 def main():
 	root = Tk()
-	user_id = 1  # Replace with the actual user ID
-	UserProfile(root, user_id)
+	UserProfile(root, self.username)
 	root.mainloop()
 
 
