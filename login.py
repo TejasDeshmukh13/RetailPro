@@ -3,7 +3,7 @@ from PIL import Image, ImageTk
 from tkinter import ttk, messagebox
 import mysql.connector
 import subprocess
-from userprofile import UserProfile
+
 
 
 class loginClass:

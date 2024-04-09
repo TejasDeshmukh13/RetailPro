@@ -36,7 +36,7 @@ class customerClass:
         self.var_gst = StringVar()
         self.var_amount = StringVar()
         self.var_sale = StringVar()
-        
+
 
         # Title
         title = Label(self.root, text="CUSTOMER DETAILS", font=(
@@ -71,7 +71,7 @@ class customerClass:
         lbl_gst.place(x=50, y=220)
         options = ["0", "5", "12", "18", "28"]  # GST rate
         txt_gst = ttk.Combobox(self.root, textvariable=self.var_gst, values=options, font=("goudy old style", 15),
-                                background="lightyellow")
+                               background="lightyellow")
         txt_gst.place(x=150, y=220, width=180)
         lbl_amount = Label(
             self.root, text="Total Amount", font=("goudy old style", 15), bg="white")
@@ -147,28 +147,34 @@ class customerClass:
             gst = self.var_gst.get()
             total_amount = self.var_amount.get()
             sale_price = self.var_sale.get()
+            # Check if stock quantity is below low_stk_alert
 
-            # Inserting data into the customer table
-            query = "INSERT INTO customer (product_id, product_name, product_quantity, GST, total_amount, sale_price, sale_month) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            values = (product_id , product_name , quantity , gst.strip('%') , total_amount , sale_price , datetime.now().month)
-            self.cursor.execute(query , values)
-            self.db.commit()
+            check_query = "SELECT stock_quantity, low_stk_alert FROM inventory WHERE prod_id = %s"
+            self.cursor.execute(check_query, (product_id,))
+            stock_quantity, low_stk_alert = self.cursor.fetchone()
+            if stock_quantity < low_stk_alert:
+                messagebox.showwarning("Low Stock Alert", "Stock quantity has gone below the limit!")
+            elif stock_quantity==0:
+                messagebox.showerror("Not In Stock" , "Product not present in stock! Please Refill!")
+                self.clear_data()
+            else:
+                # Inserting data into the customer table
+                query = "INSERT INTO customer (product_id, product_name, product_quantity, GST, total_amount, sale_price, sale_month) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                values = (product_id , product_name , quantity , gst.strip('%') , total_amount , sale_price , datetime.now().month)
+                self.cursor.execute(query , values)
+                self.db.commit()
 
             # Update inventory table's stock quantity
-            update_query = "UPDATE inventory SET stock_quantity = stock_quantity - %s WHERE prod_id = %s"
-            self.cursor.execute(update_query , (quantity , product_id))
-            self.db.commit()
+                update_query = "UPDATE inventory SET stock_quantity = stock_quantity - %s WHERE prod_id = %s"
+                self.cursor.execute(update_query , (quantity , product_id))
+                self.db.commit()
 
             # Check if stock quantity is below low_stk_alert
-            check_query = "SELECT stock_quantity, low_stk_alert FROM inventory WHERE prod_id = %s"
-            self.cursor.execute(check_query , (product_id ,))
-            stock_quantity , low_stk_alert = self.cursor.fetchone()
-            if stock_quantity < low_stk_alert :
-                messagebox.showwarning("Low Stock Alert" , "Stock quantity has gone below the limit!")
 
-            messagebox.showinfo("Success" , "Data saved successfully!")
-            self.clear_data()
-            self.update_treeview()  # Update the Treeview after saving
+
+                messagebox.showinfo("Success" , "Data saved successfully!")
+                self.clear_data()
+                self.update_treeview()  # Update the Treeview after saving
 
         except mysql.connector as e:
             messagebox.showerror("Error" , f"Database error: {e}")
@@ -213,15 +219,15 @@ class customerClass:
                 product_id, sale_price, stock_quantity,GST, low_stk_alert= data
 
                 if stock_quantity == 0 :
-                    messagebox.showwarning("Not In Stock" , "Product not present in stock! Please Refill!")
+                    messagebox.showerror("Not In Stock" , "Product not present in stock! Please Refill!")
                     self.clear_data()
                 elif stock_quantity < low_stk_alert :
                     messagebox.showwarning("Low Stock Alert" , f"Stock quantity has gone below the limit for Product {product_name}")
-
-                # Update the corresponding text fields with the retrieved data
-                self.var_cust_id.set(product_id)
-                self.var_sale.set(sale_price)
-                self.var_gst.set(str(GST)+'%')
+                else:
+                    # Update the corresponding text fields with the retrieved data
+                    self.var_cust_id.set(product_id)
+                    self.var_sale.set(sale_price)
+                    self.var_gst.set(str(GST)+'%')
                 return True
 
             else:

@@ -48,7 +48,6 @@ class Expentory:
 			bd=5,
 			cursor="hand1"
 		).place(x=20, y=30)
-
 		Button(width=7, pady=0, text='Profile',command=self.reg, bg='light blue', fg='black', border=3,
 		       font=("times new roman", 15, "bold"),
 		       ).place(x=1240, y=20)
@@ -136,7 +135,7 @@ class Expentory:
 
 	def reg(self):
 		self.root.destroy()
-		subprocess.run(['python', '.py'])
+		subprocess.run(['python', 'reg.py'])
 root = Tk()
 obj = Expentory(root)
 root.mainloop()
