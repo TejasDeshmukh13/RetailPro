@@ -1,10 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
 
 def about_us():
-    about_window = tk.Toplevel(root)
+    about_window = tk.Tk()
     about_window.title("About Us")
-    about_window.geometry("600x400")
+    about_window.geometry("1150x600+220+130")
     about_window.configure(bg="#f0f0f0")
 
     # Create a frame with a gradient background
@@ -21,18 +20,8 @@ def about_us():
                                font=("Arial", 12), wraplength=580, justify="left", bg="#d1e8e7", fg="#333333")
     about_paragraph.pack(padx=20, pady=(0, 20))
 
-# Create main window
-root = tk.Tk()
-root.title("Retail Pro - About Us")
-root.geometry("400x300")
-
-# Set a custom style for buttons
-style = ttk.Style()
-style.configure("TButton", font=("Arial", 14), background="#4caf50", foreground="white", relief=tk.FLAT)
-
-# About Us Button
-about_button = ttk.Button(root, text="About Us", command=about_us)
-about_button.pack(pady=50)
+# Call the about_us function directly to open the About Us window
+about_us()
 
 # Run the main event loop
-root.mainloop()
+tk.mainloop()
