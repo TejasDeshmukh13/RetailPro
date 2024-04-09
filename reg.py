@@ -1,130 +1,64 @@
-import ast
-from tkinter import*
+from tkinter import *
 from tkinter import messagebox
-import pymysql
+import mysql.connector
 
 
+class UserProfile:
+	def __init__(self, root, user_id):
+		self.root = root
+		self.root.title("User Profile")
+		self.root.geometry("600x400")  # Increase frame size
 
-window=Tk()
-window.title("SignUp")
-window.geometry('925x550+300+200')
-window.config(bg='#fff')
-window.resizable(False,False)
+		try:
+			# Connect to MySQL database
+			self.db = mysql.connector.connect(
+				host="localhost",
+				user="root",
+				password="D@zypiyu123",
+				database="retailers",
+				port=3306
+			)
 
-def expentory():
-    username=user.get()
-    password=enter_code.get()
-    confirm_password=confirm_code.get()
+			# Fetch user data from the database
+			self.cursor = self.db.cursor()
+			query = "SELECT * FROM login WHERE username = %s"
+			self.cursor.execute(query, (user_id,))
+			user_data = self.cursor.fetchone()
 
-    if password==confirm_password:
-   
-        try:
-            connection = pymysql.connect(host="localhost",user="root",password="root", database="retailers")
-            cur = connection.cursor()
-            connection.close()
-        finally: 
-            messagebox.showinfo('Signup','Successfully sign up')
+			# Display user profile information
+			if user_data:
+				self.display_profile(user_data)
+			else:
+				messagebox.showerror("Error", "User not found")
+				self.root.destroy()
+		except mysql.connector.Error as err:
+			messagebox.showerror("MySQL Error", f"Error: {err}")
+			self.root.destroy()
 
-img = PhotoImage(file='login.png')
-Label(window,image=img,bg='white').place(x=50,y=100)
+	def display_profile(self, user_data):
+		# User profile frame
+		frame = Frame(self.root)
+		frame.pack(pady=20)  # Add some padding
 
-frame=Frame(window,width=450,height=500,bg="white")
-frame.place(x=450,y=50)
+		# Load and display image
+		img = PhotoImage(file='hyy.png')
+		img_label = Label(frame, image=img)
+		img_label.image = img  # Keep a reference to the image to prevent garbage collection
+		img_label.pack()
 
-heading=Label(frame,text='SIGN UP',fg='#57a1f8',bg='white',font=('Microsoft YaHei UI',23,'bold'))
-heading.place(x=100,y=-5)
-
-###########------------------------
-def on_enter(e):
-    user.delete(0,'end')
-
-def on_leave(e):
-    name=user.get()
-    if name=='':
-        user.insert(0,'Username')
-
-   
-user = Entry(frame,width=25,fg='black',border=0,bg="white",font=('Microsoft YaHei UI Light',11))
-user.place(x=30,y=60)
-user.insert(0,'Username')
-user.bind('<FocusIn>', on_enter)
-user.bind('<FocusOut>', on_leave)
-
-
-Frame(frame,width=295,height=2,bg='black').place(x=25,y=87)
-
-#########------------------
-def on_enter(e):
-    email.delete(0,'end')
-
-def on_leave(e):
-    name=email.get()
-    if name=='':
-        email.insert(0,'Email Id')
-email = Entry(frame,width=25,fg='black',border=0,bg="white",font=('Microsoft YaHei UI Light',11))
-email.place(x=30,y=130)
-email.insert(0,'Email Id')
-email.bind('<FocusIn>', on_enter)
-email.bind('<FocusOut>', on_leave)
-
-Frame(frame,width=295,height=2,bg='black').place(x=25,y=157)
-
-#########------------------
-def on_enter(e):
-    mobile.delete(0,'end')
-
-def on_leave(e):
-    name=mobile.get()
-    if name=='':
-        mobile.insert(0,'Mobile No')
-mobile = Entry(frame,width=25,fg='black',border=0,bg="white",font=('Microsoft YaHei UI Light',11))
-mobile.place(x=30,y=200)
-mobile.insert(0,'Mobile No')
-mobile.bind('<FocusIn>', on_enter)
-mobile.bind('<FocusOut>', on_leave)
-
-Frame(frame,width=295,height=2,bg='black').place(x=25,y=227)
-
-#########------------------
-def on_enter(e):
-    enter_code.delete(0,'end')
-
-def on_leave(e):
-    name=enter_code.get()
-    if name=='':
-        enter_code.insert(0,'Enter Password')
-enter_code = Entry(frame,width=25,fg='black',border=0,bg="white",font=('Microsoft YaHei UI Light',11))
-enter_code.place(x=30,y=270)
-enter_code.insert(0,'Enter Password')
-enter_code.bind('<FocusIn>', on_enter)
-enter_code.bind('<FocusOut>', on_leave)
-
-Frame(frame,width=295,height=2,bg='black').place(x=25,y=297)
-
-#########------------------
-def on_enter(e):
-    confirm_code.delete(0,'end')
-
-def on_leave(e):
-    name=confirm_code.get()
-    if name=='':
-        confirm_code.insert(0,'Confirm Password')
-confirm_code = Entry(frame,width=25,fg='black',border=0,bg="white",font=('Microsoft YaHei UI Light',11))
-confirm_code.place(x=30,y=340)
-confirm_code.insert(0,'Confirm Password')
-confirm_code.bind('<FocusIn>', on_enter)
-confirm_code.bind('<FocusOut>', on_leave)
-
-Frame(frame,width=295,height=2,bg='black').place(x=25,y=367)
-
-####################------------------------------
-
-Button(frame,width=39,pady=7,text='SIGN UP',bg='#57a1f8',fg='white',border=0,command=expentory).place(x=35,y=400)
-label=Label(frame,text="I have an account?",fg='black',bg='white',font=('Microsoft YaHei UI Light',9))
-label.place(x=95,y=440)
-
-sign_in= Button(frame,width=6,text='Sign in',border=0,bg='white',cursor='hand2',fg='#57a1f8')
-sign_in.place(x=215,y=440)
+		# User profile labels with larger font
+		Label(frame, text="User Profile", font=("Helvetica", 24, "bold")).pack(pady=10)  # Larger font
+		Label(frame, text=f"Username: {user_data[1]}", font=("Helvetica", 16)).pack()  # Larger font
+		Label(frame, text=f"Email: {user_data[2]}", font=("Helvetica", 16)).pack()  # Larger font
+		Label(frame, text=f"Mobile: {user_data[3]}", font=("Helvetica", 16)).pack()  # Larger font
 
 
-window.mainloop()
+def main():
+	root = Tk()
+	user_id = 1  # Replace with the actual user ID
+	UserProfile(root, user_id)
+	root.mainloop()
+
+
+if __name__ == "__main__":
+	main()

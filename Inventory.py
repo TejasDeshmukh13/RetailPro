@@ -16,7 +16,7 @@ class InventoryClass:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="root",
+            password="D@zypiyu123",
             database="retailers",
             port=3306
         )
@@ -95,8 +95,10 @@ class InventoryClass:
         item = self.InventoryTable.focus()
         if item:
             values = self.InventoryTable.item(item, "values")
+            product_id = values[0]  # Assuming product ID is the first column in the table
             prd_status_window = Toplevel(self.root)
-            obj = PrdStatusClass(prd_status_window, values[0])  # Passing the product ID as a string to the PrdStatusClass constructor
+            obj = PrdStatusClass(prd_status_window, product_id)
+    # Passing the product ID as a string to the PrdStatusClass constructor
 
 class PrdStatusClass:
     def __init__(self, root, product_id):
@@ -110,7 +112,7 @@ class PrdStatusClass:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="root",
+            password="D@zypiyu123",
             database="retailers",
             port=3306
         )

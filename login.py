@@ -11,7 +11,7 @@ class loginClass:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="root",
+            password="D@zypiyu123",
             database="retailers",
             port=3306
         )
