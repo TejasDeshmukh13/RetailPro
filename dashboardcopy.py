@@ -1,9 +1,21 @@
 import tkinter as tk
+import subprocess
+
+def close_about(about_window):
+    about_window.destroy()
+    subprocess.run(['python', 'dashboard.py'])
 
 def about_us():
     about_window = tk.Tk()
     about_window.title("About Us")
-    about_window.geometry("1150x600+220+130")
+    screen_width = about_window.winfo_screenwidth()
+    screen_height = about_window.winfo_screenheight()
+
+    # Calculate x and y coordinates for the window to be centered
+    x_coordinate = (screen_width - 1170) // 2
+    y_coordinate = (screen_height - 750) // 2
+
+    about_window.geometry(f"1170x750+{x_coordinate}+{y_coordinate}")
     about_window.configure(bg="#f0f0f0")
 
     # Create a frame with a gradient background
@@ -20,8 +32,11 @@ def about_us():
                                font=("Arial", 12), wraplength=580, justify="left", bg="#d1e8e7", fg="#333333")
     about_paragraph.pack(padx=20, pady=(0, 20))
 
+    # Back Button
+    back_button = tk.Button(about_window, text="Back", font=("Arial", 12), command=lambda: close_about(about_window))
+    back_button.place(x=1050, y=20, width=80, height=25)
+
+    about_window.mainloop()
+
 # Call the about_us function directly to open the About Us window
 about_us()
-
-# Run the main event loop
-tk.mainloop()
