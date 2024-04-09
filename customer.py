@@ -17,7 +17,7 @@ class customerClass:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="D@zypiyu123",
+            password="root",
             database="retailers",
             port=3306
         )
@@ -33,9 +33,10 @@ class customerClass:
         self.var_cust_id = StringVar()
         self.var_pname = StringVar()
         self.var_quantity = StringVar()
-        self.var_cname = StringVar()
+        self.var_gst = StringVar()
         self.var_amount = StringVar()
         self.var_sale = StringVar()
+        
 
         # Title
         title = Label(self.root, text="CUSTOMER DETAILS", font=(
@@ -65,13 +66,13 @@ class customerClass:
         txt_quantity.place(x=850, y=150, width=180)
 
         # Row 2
-        lbl_cname = Label(
+        lbl_gst = Label(
             self.root, text="GST", font=("goudy old style", 15), bg="white")
-        lbl_cname.place(x=50, y=220)
+        lbl_gst.place(x=50, y=220)
         options = ["0", "5", "12", "18", "28"]  # GST rate
-        txt_cname = ttk.Combobox(self.root, textvariable=self.var_cname, values=options, font=("goudy old style", 15),
+        txt_gst = ttk.Combobox(self.root, textvariable=self.var_gst, values=options, font=("goudy old style", 15),
                                 background="lightyellow")
-        txt_cname.place(x=150, y=220, width=180)
+        txt_gst.place(x=150, y=220, width=180)
         lbl_amount = Label(
             self.root, text="Total Amount", font=("goudy old style", 15), bg="white")
         lbl_amount.place(x=350, y=220)
@@ -111,7 +112,7 @@ class customerClass:
         scrolly = Scrollbar(cust_frame, orient=VERTICAL)
         scrollX = Scrollbar(cust_frame, orient=HORIZONTAL)
 
-        self.CustomerTable = ttk.Treeview(cust_frame, column=("Cid", "Pname", "quantity", "Cname", "Amount", "Sale"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
+        self.CustomerTable = ttk.Treeview(cust_frame, column=("Cid", "Pname", "quantity", "gst", "Amount", "Sale"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
         scrollX.pack(side=BOTTOM, fill=X)
         scrolly.pack(side=RIGHT, fill=Y)
         scrollX.config(command=self.CustomerTable.xview)
@@ -119,7 +120,7 @@ class customerClass:
         self.CustomerTable.heading("Cid", text="Product ID")
         self.CustomerTable.heading("Pname", text="Product Name")
         self.CustomerTable.heading("quantity", text="Product quantity")
-        self.CustomerTable.heading("Cname", text="GST")
+        self.CustomerTable.heading("gst", text="GST")
         self.CustomerTable.heading("Amount", text="Total Amount")
         self.CustomerTable.heading("Sale", text="Sale Price")
         self.CustomerTable["show"] = "headings"
@@ -133,32 +134,46 @@ class customerClass:
         self.var_cust_id.set("")
         self.var_pname.set("")
         self.var_quantity.set("")
-        self.var_cname.set("")
+        self.var_gst.set("")
         self.var_amount.set("")
         self.var_sale.set("")
 
-    def save_data(self):
-        try:
+    def save_data(self) :
+        try :
             # Fetching data from entry widgets
             product_id = self.var_cust_id.get()
             product_name = self.var_pname.get()
-            quantity = self.var_quantity.get()
-            cust_name = self.var_cname.get()
+            quantity = int(self.var_quantity.get())  # Convert quantity to int
+            gst = self.var_gst.get()
             total_amount = self.var_amount.get()
             sale_price = self.var_sale.get()
 
-            # Inserting data into the database
+            # Inserting data into the customer table
             query = "INSERT INTO customer (product_id, product_name, product_quantity, GST, total_amount, sale_price, sale_month) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            values = (product_id, product_name, quantity, cust_name,total_amount, sale_price, datetime.now().month)
-
-            self.cursor.execute(query, values)
+            values = (product_id , product_name , quantity , gst.strip('%') , total_amount , sale_price , datetime.now().month)
+            self.cursor.execute(query , values)
             self.db.commit()
 
-            messagebox.showinfo("Success", "Data saved successfully!")
+            # Update inventory table's stock quantity
+            update_query = "UPDATE inventory SET stock_quantity = stock_quantity - %s WHERE prod_id = %s"
+            self.cursor.execute(update_query , (quantity , product_id))
+            self.db.commit()
+
+            # Check if stock quantity is below low_stk_alert
+            check_query = "SELECT stock_quantity, low_stk_alert FROM inventory WHERE prod_id = %s"
+            self.cursor.execute(check_query , (product_id ,))
+            stock_quantity , low_stk_alert = self.cursor.fetchone()
+            if stock_quantity < low_stk_alert :
+                messagebox.showwarning("Low Stock Alert" , "Stock quantity has gone below the limit!")
+
+            messagebox.showinfo("Success" , "Data saved successfully!")
             self.clear_data()
             self.update_treeview()  # Update the Treeview after saving
-        except Exception as e:
-            messagebox.showerror("Error", f"Error: {str(e)}")
+
+        except mysql.connector as e:
+	            messagebox.showerror("Error" , f"Database error: {e}")
+        except Exception as e :
+	        messagebox.showerror("Error" , f"Error: {str(e)}")
 
     def update_treeview(self):
         # Clear the existing data in the Treeview
@@ -186,25 +201,29 @@ class customerClass:
             product_name = self.var_pname.get()
 
             # Fetching data from the database based on the entered product ID
-            query = "SELECT prod_id, sale_per_unit FROM inventory WHERE prd_name = %s"
+            query = "SELECT prod_id, sale_per_unit, stock_quantity, GST, low_stk_alert FROM inventory WHERE prd_name = %s"
             self.cursor.execute(query, (product_name,))
             data = self.cursor.fetchone()
+
 
             if data:
                 messagebox.showinfo(
                     "Found", f"Data found for Product name: {product_name}")
                 # Data found for the product ID
-                product_name, sale_price = data
+                product_id, sale_price, stock_quantity,GST, low_stk_alert= data
+
+                if stock_quantity < low_stk_alert :
+                    messagebox.showwarning("Low Stock Alert" , f"Stock quantity has gone below the limit for Product {product_name}")
 
                 # Update the corresponding text fields with the retrieved data
-                self.var_cust_id.set(product_name)
+                self.var_cust_id.set(product_id)
                 self.var_sale.set(sale_price)
+                self.var_gst.set(str(GST)+'%')
                 return True
 
             else:
                 # No data found for the product ID
-                messagebox.showinfo(
-                    "Not Found", f"No data found for Product name: {product_name}")
+                messagebox.showinfo("Not Found", f"No data found for Product name: {product_name}")
                 return False
 
         except Exception as e:

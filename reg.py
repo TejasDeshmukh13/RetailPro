@@ -19,7 +19,7 @@ def expentory():
     if password==confirm_password:
    
         try:
-            connection = pymysql.connect(host="localhost",user="root",password="D@zypiyu123", database="retailers")
+            connection = pymysql.connect(host="localhost",user="root",password="root", database="retailers")
             cur = connection.cursor()
             connection.close()
         finally: 

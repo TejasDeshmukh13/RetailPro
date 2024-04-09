@@ -20,7 +20,7 @@ class SalesClass(Tk):
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="D@zypiyu123",
+            password="root",
             database="retailers",
             port=3306
         )
@@ -33,6 +33,10 @@ class SalesClass(Tk):
 
         title = Label(self, text="SALES DETAILS", font=("goudy old style", 15), bg="#0f4d7d",
                       fg="white").place(x=0, y=100, width=1150)
+
+        btn_back = Button(self.root , text = "BACK" , font = ("goudy old style" , 10) , bg = "blue" , fg = "white" ,
+                          command = self.dashboard , cursor = "hand2")
+        btn_back.place(x = 1050 , y = 20 , width = 80 , height = 25)
 
         self.figure_purchase = Figure(figsize=(6, 4), dpi=100)
         self.axes_purchase = self.figure_purchase.add_subplot(111)
