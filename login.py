@@ -179,7 +179,7 @@ label=Label(frame,text="Don't have an account?",fg='black',bg='white',font=('Mic
 label.place(x=75,y=270)
 def reg():
     root.destroy()
-    subprocess.run(['python', 'prdstatus.py'])
+    subprocess.run(['python', 'signup.py'])
 sign_up= Button(frame,width=6,text='Sign up',border=0,bg='white',cursor='hand2',fg='#57a1f8',command=reg)
 sign_up.place(x=215,y=270)
 

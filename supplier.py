@@ -154,7 +154,7 @@ class supplierClass:
         self.SupplierTable.heading("pname", text="Product Name")
         self.SupplierTable.heading("pprice", text="Purchase Price")
         self.SupplierTable.heading("qnty", text="Quantity bought")
-        self.SupplierTable.heading("sprice", text="Sales price")
+        self.SupplierTable.heading("sprice", text="sales price")
         self.SupplierTable.heading("gst", text="GST")
         self.SupplierTable.heading("tprice", text="Total Price")
 

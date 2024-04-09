@@ -147,11 +147,18 @@ class customerClass:
             gst = self.var_gst.get()
             total_amount = self.var_amount.get()
             sale_price = self.var_sale.get()
+            update_query = "UPDATE inventory SET stock_quantity = stock_quantity - %s WHERE prod_id = %s"
+            self.cursor.execute(update_query, (quantity, product_id))
+            self.db.commit()
+
             # Check if stock quantity is below low_stk_alert
 
             check_query = "SELECT stock_quantity, low_stk_alert FROM inventory WHERE prod_id = %s"
             self.cursor.execute(check_query, (product_id,))
             stock_quantity, low_stk_alert = self.cursor.fetchone()
+            # Update inventory table's stock quantity
+
+
             if stock_quantity < low_stk_alert:
                 messagebox.showwarning("Low Stock Alert", "Stock quantity has gone below the limit!")
             elif stock_quantity==0:
@@ -164,10 +171,7 @@ class customerClass:
                 self.cursor.execute(query , values)
                 self.db.commit()
 
-            # Update inventory table's stock quantity
-                update_query = "UPDATE inventory SET stock_quantity = stock_quantity - %s WHERE prod_id = %s"
-                self.cursor.execute(update_query , (quantity , product_id))
-                self.db.commit()
+
 
             # Check if stock quantity is below low_stk_alert
 
@@ -223,6 +227,10 @@ class customerClass:
                     self.clear_data()
                 elif stock_quantity < low_stk_alert :
                     messagebox.showwarning("Low Stock Alert" , f"Stock quantity has gone below the limit for Product {product_name}")
+                    # Update the corresponding text fields with the retrieved data
+                    self.var_cust_id.set(product_id)
+                    self.var_sale.set(sale_price)
+                    self.var_gst.set(str(GST) + '%')
                 else:
                     # Update the corresponding text fields with the retrieved data
                     self.var_cust_id.set(product_id)

@@ -49,7 +49,7 @@ class supplierClass:
         txt_search = Entry(self.root, textvariable=self.var_searchtxt, font=("goudy old style", 15), bg="lightyellow")
         txt_search.place(x=500, y=450, width=180)
 
-        lbl_search = Label(self.root, text="Search by Product Id.", bg="white", font=("goudy old style", 15))
+        lbl_search = Label(self.root, text="Search by Product Name.", bg="white", font=("goudy old style", 15))
         lbl_search.place(x=300, y=450)
 
         btn_back = Button(self.root, text="BACK", font=("goudy old style", 10), bg="blue", fg="white",
@@ -135,7 +135,7 @@ class supplierClass:
         btn_calculate.place(x=580, y=400, width=120, height=28)
 
         btn_check_id = Button(self.root, text="Check", font=("goudy old style", 12), bg="#4caf50", fg="white", cursor="hand2", command=self.check_prod_id)
-        btn_check_id.place(x=850, y=180, width=60, height=25)
+        btn_check_id.place(x=180, y=250, width=60, height=25)
         # ====================Supplier Details=================
         supp_frame = Frame(self.root, bd=3, relief=RIDGE)
         supp_frame.place(x=0, y=500, relwidth=1, height=400)
@@ -230,8 +230,8 @@ class supplierClass:
             dpd = self.var_dropdown.get()
 
             # Check if the product exists in the inventory
-            check_query = "SELECT * FROM inventory WHERE prod_id = %s"
-            self.cursor.execute(check_query , (prid ,))
+            check_query = "SELECT * FROM inventory WHERE prd_name = %s"
+            self.cursor.execute(check_query , (prname ,))
             result = self.cursor.fetchone()
 
             if not result :
@@ -244,16 +244,16 @@ class supplierClass:
                 self.db.commit()
             else :
                 # If the product already exists, update its details
-                update_query = "UPDATE inventory SET prd_name = %s, purchase_per_unit = %s, sale_per_unit = %s, stock_quantity = %s, stock_price = %s, GST = %s, low_stk_alert = %s WHERE prod_id = %s"
+                update_query = "UPDATE inventory SET prod_id = %s, purchase_per_unit = %s, sale_per_unit = %s, stock_quantity = %s, stock_price = %s, GST = %s, low_stk_alert = %s WHERE prd_name = %s"
                 # Fetching initial stock quantity from the inventory
-                query = "SELECT stock_quantity FROM inventory WHERE prod_id = %s"
-                self.cursor.execute(query , (prid ,))
+                query = "SELECT stock_quantity FROM inventory WHERE prd_name = %s"
+                self.cursor.execute(query , (prname ,))
                 initial_stock_quantity = self.cursor.fetchone()[0]
                 # Calculate total quantity
                 total_quantity = initial_stock_quantity + int(qntty)
                 # Calculate new stock price
                 stock_price = total_quantity * float(salepr) + total_quantity * float(salepr) * (int(dpd) / 100)
-                update_values = (prname , pprice , salepr , total_quantity , stock_price , int(dpd) , alrt , prid)
+                update_values = (prid , pprice , salepr , total_quantity , stock_price , int(dpd) , alrt , prname)
                 self.cursor.execute(update_query , update_values)
                 self.db.commit()
 
@@ -287,11 +287,11 @@ class supplierClass:
 
     def search_product(self):
         try:
-            product_id = self.var_searchtxt.get()
+            product_name = self.var_searchtxt.get()
 
             # Fetching all data from the database based on the entered product ID
-            query = "SELECT supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price FROM supplier where product_id=%s"
-            self.cursor.execute(query, (product_id,))
+            query = "SELECT supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price FROM supplier where product_name=%s"
+            self.cursor.execute(query, (product_name,))
             data = self.cursor.fetchall()
 
             if data:
@@ -303,9 +303,9 @@ class supplierClass:
                 for row in data:
                     self.SupplierTable.insert("", "end", values=row)
 
-                messagebox.showinfo("Found", f"Data found for Product ID: {product_id}")
+                messagebox.showinfo("Found", f"Data found for Product name: {product_name}")
             else:
-                messagebox.showerror("Not Found", f"No data found for Product ID: {product_id}")
+                messagebox.showerror("Not Found", f"No data found for Product name: {product_name}")
         except Exception as e:
             messagebox.showerror("Fetching Error", f"Error fetching data: {str(e)}")
 
@@ -314,29 +314,29 @@ class supplierClass:
 
     def check_prod_id(self):
         try:
-            product_id = self.var_ppid.get()
+            product_name = self.var_pname.get()
 
             # Fetching data from the database based on the entered product ID
-            query = "SELECT prd_name, purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prod_id = %s"
-            self.cursor.execute(query, (product_id,))
+            query = "SELECT prod_id, purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prd_name = %s"
+            self.cursor.execute(query, (product_name,))
             data = self.cursor.fetchone()
 
             if data:
                 # Product ID found in the inventory
-                product_name, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
+                product_id, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
 
                 # Update the corresponding text fields with the retrieved data
-                self.var_pname.set(product_name)
+                self.var_ppid.set(product_id)
                 self.var_pprice.set(purchase_price)
                 self.var_salesp.set(sale_price)
                 self.var_iniqntty.set(stock_quantity)
                 self.var_dropdown.set(gst)
                 self.var_alert.set(low_stock_alert)
 
-                messagebox.showinfo("Found", f"Data found for Product ID: {product_id}")
+                messagebox.showinfo("Found", f"Data found for Product name: {product_name}")
             else:
                 # Product ID not found in the inventory
-                messagebox.showerror("Not Found", f"No data found for Product ID: {product_id}")
+                messagebox.showerror("Not Found", f"No data found for Product name: {product_name}")
         except Exception as e:
             messagebox.showerror("Fetching Error", f"Error fetching data: {str(e)}")
 
