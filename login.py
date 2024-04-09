@@ -106,8 +106,13 @@ class UserProfile:
 		Label(frame, text="User Profile", font=("Helvetica", 24, "bold")).pack(pady=10)  # Larger font
 		Label(frame, text=f"Username: {user_data[0]}", font=("Helvetica", 16)).pack()  # Larger font
 		Label(frame, text=f"Email: {user_data[1]}", font=("Helvetica", 16)).pack()  # Larger font
-		Label(frame, text=f"Mobile: {user_data[2]}", font=("Helvetica", 16)).pack()  # Larger font
-        Bu
+		Label(frame, text=f"Mobile: {user_data[2]}", font=("Helvetica", 16)).pack()
+		Button(frame, text="Close", command= self.dashboard).pack(side="top", anchor="ne")
+
+	def dashboard(self) :
+		self.root.destroy()
+		subprocess.run(['python', 'dashboard.py'])
+
 def userprofile(self, username):
         root = Tk()  # Create a new window for user profile
         userprofile(root, username)  # Pass user ID to UserProfile class
