@@ -29,10 +29,11 @@ class supplierClass:
 
         # ======================================
         # All Variables=======
-        self.var_supp_name = StringVar()
+        self.var_supp_id = StringVar()
         self.var_mobile = StringVar()
         self.var_ppid = StringVar()
-        self.var_pname = StringVar()
+        self.var_prod_names = StringVar()
+        self.prod_names = []
         self.var_pprice = StringVar()
         self.var_qntty = StringVar()
         self.var_iniqntty = StringVar()
@@ -67,27 +68,30 @@ class supplierClass:
 
         # ====title======
         title = Label(self.root, text="SUPPLIER DETAILS", font=("goudy old style", 15), bg="#0f4d7d", fg="white")
-        title.place(x=0, y=100, width=1150)
+        title.place(x=0, y=75, width=1150)
 
         # =======content=========
         # ==========row1==========
-        lbl_supp_name = Label(self.root, text="Sup.Name", font=("goudy old style", 15), bg="white")
+        lbl_supp_name = Label(self.root, text="Supplier Id", font=("goudy old style", 15), bg="white")
         lbl_supp_name.place(x=50, y=150)
         lbl_mobile = Label(self.root, text="Mobile No", font=("goudy old style", 15), bg="white")
         lbl_mobile.place(x=400, y=150)
-        lbl_ppid = Label(self.root, text="Product Id", font=("goudy old style", 15), bg="white")
-        lbl_ppid.place(x=750, y=150)
+        lbl_pname = Label(self.root , text = "Product Name" , font = ("goudy old style" , 15) , bg = "white")
+        lbl_pname.place(x = 750 , y = 150)
 
-        txt_supp_name = Entry(self.root, textvariable=self.var_supp_name, font=("goudy old style", 15), bg="lightyellow")
-        txt_supp_name.place(x=180, y=150, width=180)
+
+        txt_supp_id = Entry(self.root, textvariable=self.var_supp_id, font=("goudy old style", 15), bg="lightyellow")
+        txt_supp_id.place(x=180, y=150, width=180)
         txt_mobile = Entry(self.root, textvariable=self.var_mobile, font=("goudy old style", 15), bg="lightyellow")
         txt_mobile.place(x=550, y=150, width=180)
-        txt_ppid = Entry(self.root, textvariable=self.var_ppid, font=("goudy old style", 15), bg="lightyellow")
-        txt_ppid.place(x=850, y=150, width=180)
+        self.dropdown_prod_names = ttk.Combobox(self.root , textvariable = self.var_prod_names ,
+                                                values = self.prod_names , font = ("goudy old style" , 15) ,
+                                                background = "lightyellow")
+        self.dropdown_prod_names.place(x = 890 , y = 150 , width = 180)
 
         # ==========row2==========
-        lbl_pname = Label(self.root, text="Product Name", font=("goudy old style", 15), bg="white")
-        lbl_pname.place(x=50, y=220)
+        lbl_ppid = Label(self.root , text = "Product Id" , font = ("goudy old style" , 15) , bg = "white")
+        lbl_ppid.place(x = 50 , y = 220)
         lbl_pprice = Label(self.root, text="Purchase Price", font=("goudy old style", 15), bg="white")
         lbl_pprice.place(x=400, y=220)
         lbl_qntty = Label(self.root, text="Quantity", font=("goudy old style", 15), bg="white")
@@ -105,8 +109,8 @@ class supplierClass:
         lbl_percentage = Label(self.root, text="%", font=("goudy old style", 15), bg="white")
         lbl_percentage.place(x=305, y=370, width=20)
 
-        txt_pname = Entry(self.root, textvariable=self.var_pname, font=("goudy old style", 15), bg="lightyellow")
-        txt_pname.place(x=180, y=220, width=180)
+        txt_ppid = Entry(self.root , textvariable = self.var_ppid , font = ("goudy old style" , 15) ,bg = "lightyellow")
+        txt_ppid.place(x = 180 , y = 220 , width = 180)
         txt_pprice = Entry(self.root, textvariable=self.var_pprice, font=("goudy old style", 15), bg="lightyellow")
         txt_pprice.place(x=550, y=220, width=180)
         txt_iniqntty = Entry(self.root, textvariable=self.var_iniqntty, font=("goudy old style", 15), bg="lightyellow")
@@ -134,8 +138,13 @@ class supplierClass:
         btn_calculate = Button(self.root, text="CALCULATE", font=("goudy old style", 15), bg="deep sky blue", fg="white", cursor="hand2", command=self.calculate_total_price)
         btn_calculate.place(x=580, y=400, width=120, height=28)
 
-        btn_check_id = Button(self.root, text="Check", font=("goudy old style", 12), bg="#4caf50", fg="white", cursor="hand2", command=self.check_prod_id)
-        btn_check_id.place(x=180, y=250, width=60, height=25)
+        btn_check_prd_id = Button(self.root, text="Check", font=("goudy old style", 12), bg="#4caf50", fg="white", cursor="hand2", command=self.check_prod_id)
+        btn_check_prd_id.place(x=890, y=180, width=60, height=25)
+
+        btn_check_sup_id = Button(self.root , text = "Check" , font = ("goudy old style" , 12) , bg = "#4caf50" ,fg = "white" , cursor = "hand2" , command = self.check_sup_id)
+        btn_check_sup_id.place(x = 180 , y = 180 , width = 60 , height = 25)
+
+
         # ====================Supplier Details=================
         supp_frame = Frame(self.root, bd=3, relief=RIDGE)
         supp_frame.place(x=0, y=500, relwidth=1, height=400)
@@ -143,7 +152,7 @@ class supplierClass:
         scrolly = Scrollbar(supp_frame, orient=VERTICAL)
         scrollX = Scrollbar(supp_frame, orient=HORIZONTAL)
 
-        self.SupplierTable = ttk.Treeview(supp_frame, column=("sname", "smobile", "ppid", "pname", "pprice", "qnty", "sprice", "gst", "tprice"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
+        self.SupplierTable = ttk.Treeview(supp_frame, column=("sname", "smobile", "ppid", "prd_names", "pprice", "qnty", "sprice", "gst", "tprice"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
         scrollX.pack(side=BOTTOM, fill=X)
         scrolly.pack(side=RIGHT, fill=Y)
         scrollX.config(command=self.SupplierTable.xview)
@@ -151,10 +160,10 @@ class supplierClass:
         self.SupplierTable.heading("sname", text="Supplier Name")
         self.SupplierTable.heading("smobile", text="Supplier mobile no")
         self.SupplierTable.heading("ppid", text="Product ID")
-        self.SupplierTable.heading("pname", text="Product Name")
+        self.SupplierTable.heading("prd_names", text="Product Name")
         self.SupplierTable.heading("pprice", text="Purchase Price")
         self.SupplierTable.heading("qnty", text="Quantity bought")
-        self.SupplierTable.heading("sprice", text="sales price")
+        self.SupplierTable.heading("sprice", text="Sales price")
         self.SupplierTable.heading("gst", text="GST")
         self.SupplierTable.heading("tprice", text="Total Price")
 
@@ -184,10 +193,10 @@ class supplierClass:
 
     def clear_data(self):
         # Clearing text in entry widgets
-        self.var_supp_name.set("")
+        self.var_supp_id.set("")
         self.var_mobile.set("")
         self.var_ppid.set("")
-        self.var_pname.set("")
+        self.var_prod_names.set("")
         self.var_pprice.set("")
         self.var_iniqntty.set("")
         self.var_qntty.set("")
@@ -196,6 +205,7 @@ class supplierClass:
         self.var_searchtxt.set("")
         self.var_dropdown.set(0)
         self.var_alert.set("")
+        self.dropdown_prod_names.config(values = [""])
 
     def calculate_total_price(self):
         try:
@@ -218,10 +228,10 @@ class supplierClass:
     def save_data(self) :
         try :
             # Fetching data from entry widgets
-            spname = self.var_supp_name.get()
+            sprd_names = self.var_supp_id.get()
             mobino = self.var_mobile.get()
             prid = int(self.var_ppid.get())
-            prname = self.var_pname.get()
+            prname = self.var_prod_names.get()
             pprice = self.var_pprice.get()
             qntty = self.var_qntty.get()
             salepr = self.var_salesp.get()
@@ -259,7 +269,7 @@ class supplierClass:
 
             # Inserting data into the supplier table
             query = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price, low_stockalert, purchase_month) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            values = (spname , mobino , prid , prname , pprice , qntty , salepr , dpd , ttpr , alrt , datetime.now().month)
+            values = (sprd_names , mobino , prid , prname , pprice , qntty , salepr , dpd , ttpr , alrt , datetime.now().month)
             self.cursor.execute(query , values)
             self.db.commit()
 
@@ -269,13 +279,6 @@ class supplierClass:
 
         except Exception as e :
             messagebox.showerror("Error" , f"Error: {str(e)}")
-
-    def get_month_abbreviation(self , month_number) :
-        month_abbr = {
-            1 : 'Jan' , 2 : 'Feb' , 3 : 'Mar' , 4 : 'Apr' , 5 : 'May' , 6 : 'Jun' ,
-            7 : 'Jul' , 8 : 'Aug' , 9 : 'Sep' , 10 : 'Oct' , 11 : 'Nov' , 12 : 'Dec'
-        }
-        return month_abbr.get(month_number , '')
 
     def display_matched_product_details(self, product_details):
         # Clear the existing rows in the Treeview
@@ -314,16 +317,16 @@ class supplierClass:
 
     def check_prod_id(self):
         try:
-            product_name = self.var_pname.get()
+            product_name = self.var_prod_names.get()
 
             # Fetching data from the database based on the entered product ID
-            query = "SELECT prod_id, purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prd_name = %s"
+            query = "SELECT prod_id, category,purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prd_name = %s"
             self.cursor.execute(query, (product_name,))
             data = self.cursor.fetchone()
 
             if data:
                 # Product ID found in the inventory
-                product_id, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
+                product_id,category, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
 
                 # Update the corresponding text fields with the retrieved data
                 self.var_ppid.set(product_id)
@@ -339,6 +342,39 @@ class supplierClass:
                 messagebox.showerror("Not Found", f"No data found for Product name: {product_name}")
         except Exception as e:
             messagebox.showerror("Fetching Error", f"Error fetching data: {str(e)}")
+
+    def check_sup_id(self) :
+        try :
+            supplier_id = self.var_supp_id.get()
+
+            # Fetching data from the database based on the entered supplier ID
+            query = "SELECT mobile_no, category FROM supplier_details WHERE sup_id = %s"
+            self.cursor.execute(query , (supplier_id ,))
+            data = self.cursor.fetchone()
+
+            if data :
+                # Supplier ID found in the supplier_details table
+                mobile_number = data[0]
+                category = data[1]
+
+                # Update the corresponding text field with the retrieved mobile number
+                self.var_mobile.set(mobile_number)
+
+                # Fetch product names from inventory table based on supplier ID
+                query = "SELECT prd_name FROM inventory WHERE sup_id = %s"
+                self.cursor.execute(query , (supplier_id ,))
+                product_names = self.cursor.fetchall()
+                self.prod_names = [name[0] for name in product_names]
+
+                # Update the product names dropdown
+                self.dropdown_prod_names.config(values = self.prod_names)
+
+                messagebox.showinfo("Found" , f"Mobile Number found for Supplier ID: {supplier_id}")
+            else :
+                # Supplier ID not found in the supplier_details table
+                messagebox.showwarning("Not Found" , f"No data found for Supplier ID: {supplier_id}")
+        except Exception as e :
+            messagebox.showerror("Fetching Error" , f"Error fetching data: {str(e)}")
 
     def dashboard(self):
         self.root.destroy()
