@@ -348,7 +348,7 @@ class supplierClass:
             supplier_id = self.var_supp_id.get()
 
             # Fetching data from the database based on the entered supplier ID
-            query = "SELECT mobile_no, category FROM supplier_details WHERE sup_id = %s"
+            query = "SELECT mobile_no FROM supplier_details WHERE sup_id = %s"
             self.cursor.execute(query , (supplier_id ,))
             data = self.cursor.fetchone()
 
