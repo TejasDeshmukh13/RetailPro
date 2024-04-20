@@ -355,7 +355,6 @@ class supplierClass:
             if data :
                 # Supplier ID found in the supplier_details table
                 mobile_number = data[0]
-                category = data[1]
 
                 # Update the corresponding text field with the retrieved mobile number
                 self.var_mobile.set(mobile_number)
