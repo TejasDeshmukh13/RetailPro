@@ -64,8 +64,6 @@ class supplierClass:
                              bg="#0f4d7d", fg="white", command=self.show_all_data)
         btn_showall.place(x=900, y=450, width=90)
 
-
-
         # ====title======
         title = Label(self.root, text="SUPPLIER DETAILS", font=("goudy old style", 15), bg="#0f4d7d", fg="white")
         title.place(x=0, y=75, width=1150)
