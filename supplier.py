@@ -320,13 +320,13 @@ class supplierClass:
             product_name = self.var_prod_names.get()
 
             # Fetching data from the database based on the entered product ID
-            query = "SELECT prod_id, category,purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prd_name = %s"
+            query = "SELECT prod_id, purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prd_name = %s"
             self.cursor.execute(query, (product_name,))
             data = self.cursor.fetchone()
 
             if data:
                 # Product ID found in the inventory
-                product_id,category, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
+                product_id, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
 
                 # Update the corresponding text fields with the retrieved data
                 self.var_ppid.set(product_id)

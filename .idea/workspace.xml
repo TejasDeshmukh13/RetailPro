@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="supplier half done as dropdown" />
+    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="check everthing">
+      <change beforePath="$PROJECT_DIR$/supplier.py" beforeDir="false" afterPath="$PROJECT_DIR$/supplier.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -330,7 +332,23 @@
       <option name="project" value="LOCAL" />
       <updated>1713616833320</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="check everthing">
+      <option name="closed" value="true" />
+      <created>1713617623241</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1713617623241</updated>
+    </task>
+    <task id="LOCAL-00027" summary="check everthing">
+      <option name="closed" value="true" />
+      <created>1713617670216</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1713617670216</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -362,6 +380,7 @@
     <MESSAGE value="aboutusdone" />
     <MESSAGE value="supplier done as dropdown" />
     <MESSAGE value="supplier half done as dropdown" />
-    <option name="LAST_COMMIT_MESSAGE" value="supplier half done as dropdown" />
+    <MESSAGE value="check everthing" />
+    <option name="LAST_COMMIT_MESSAGE" value="check everthing" />
   </component>
 </project>
