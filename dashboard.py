@@ -127,7 +127,7 @@ class Expentory:
 
 	def supplier(self):
 		self.root.destroy()
-		subprocess.run(['python', 'suppliercopy.py'])
+		subprocess.run(['python', 'supplier.py'])
 
 	def inventory(self):
 		self.root.destroy()
