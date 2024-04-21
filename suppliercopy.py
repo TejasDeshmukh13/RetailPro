@@ -88,6 +88,8 @@ class supplierClass:
                                                 values = self.prod_names , font = ("goudy old style" , 15) ,
                                                 background = "lightyellow")
         self.dropdown_prod_names.place(x = 890 , y = 150 , width = 180)
+        btn_new = Button(root, text="new", font=("goudy old style", 15), bg="#4caf50", fg="white",command=self.supplier, cursor="hand2")
+        btn_new.place(x=1050, y=80, width=70, height=25)
 
         # ==========row2==========
         lbl_ppid = Label(self.root , text = "Product Id" , font = ("goudy old style" , 15) , bg = "white")
@@ -379,6 +381,10 @@ class supplierClass:
     def dashboard(self):
         self.root.destroy()
         subprocess.run(['python', 'dashboard.py'])
+
+    def supplier(self):
+        self.root.destroy()
+        subprocess.run(['python', 'supplier.py'])
 
 root = Tk()
 obj = supplierClass(root)
