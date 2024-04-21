@@ -127,7 +127,7 @@ class Expentory:
 
 	def supplier(self):
 		self.root.destroy()
-		subprocess.run(['python', 'suppliercopy.py'])
+		subprocess.run(['python', 'supplier.py'])
 
 	def inventory(self):
 		self.root.destroy()
@@ -143,7 +143,7 @@ class Expentory:
 
 	def dashboardcopy(self):
 		self.root.destroy()
-		subprocess.run(['python', 'dashboardcopy.py'])
+		subprocess.run(['python', 'dashboard.py'])
 root = Tk()
 obj = Expentory(root)
 root.mainloop()

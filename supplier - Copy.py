@@ -68,7 +68,11 @@ class supplierClass:
 
         # ====title======
         title = Label(self.root, text="SUPPLIER DETAILS", font=("goudy old style", 15), bg="#0f4d7d", fg="white")
-        title.place(x=0, y=75, width=1150)
+        title.place(x=0, y=90, width=1150, height = 30)
+
+        btn_new = Button(self.root , text = "New Product?" , font = ("goudy old style" , 15) , bg = "#4caf50" , fg = "white" ,
+                         command = self.newprod , cursor = "hand2")
+        btn_new.place_configure(x = 1020 , y = 93 , width=120, height = 24)
 
         # =======content=========
         # ==========row1==========
@@ -88,8 +92,6 @@ class supplierClass:
                                                 values = self.prod_names , font = ("goudy old style" , 15) ,
                                                 background = "lightyellow")
         self.dropdown_prod_names.place(x = 890 , y = 150 , width = 180)
-        btn_new = Button(root, text="new", font=("goudy old style", 15), bg="#4caf50", fg="white",command=self.supplier, cursor="hand2")
-        btn_new.place(x=1050, y=80, width=70, height=25)
 
         # ==========row2==========
         lbl_ppid = Label(self.root , text = "Product Id" , font = ("goudy old style" , 15) , bg = "white")
@@ -186,7 +188,7 @@ class supplierClass:
             self.SupplierTable.delete(row)
 
         # Fetch data from the database
-        query = "SELECT supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price FROM supplier"
+        query = "SELECT sup_id, mob_no, prod_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price FROM supplier"
         self.cursor.execute(query)
         data = self.cursor.fetchall()
         # Insert data into the Treeview
@@ -270,7 +272,7 @@ class supplierClass:
                 self.db.commit()
 
             # Inserting data into the supplier table
-            query = "INSERT INTO supplier (supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price, low_stockalert, purchase_month) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            query = "INSERT INTO supplier (sup_id, mob_no, prod_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price, low_stockalert, purchase_month) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             values = (sprd_names , mobino , prid , prname , pprice , qntty , salepr , dpd , ttpr , alrt , datetime.now().month)
             self.cursor.execute(query , values)
             self.db.commit()
@@ -295,7 +297,7 @@ class supplierClass:
             product_name = self.var_searchtxt.get()
 
             # Fetching all data from the database based on the entered product ID
-            query = "SELECT supplier_name, mob_no, product_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price FROM supplier where product_name=%s"
+            query = "SELECT sup_id, mob_no, prod_id, product_name, purchase_price, quantity_bought, sales_price_perunit, gst, total_price FROM supplier where product_name=%s"
             self.cursor.execute(query, (product_name,))
             data = self.cursor.fetchall()
 
@@ -328,10 +330,10 @@ class supplierClass:
 
             if data:
                 # Product ID found in the inventory
-                product_id,category, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
+                prod_id,category, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
 
                 # Update the corresponding text fields with the retrieved data
-                self.var_ppid.set(product_id)
+                self.var_ppid.set(prod_id)
                 self.var_pprice.set(purchase_price)
                 self.var_salesp.set(sale_price)
                 self.var_iniqntty.set(stock_quantity)
@@ -382,9 +384,9 @@ class supplierClass:
         self.root.destroy()
         subprocess.run(['python', 'dashboard.py'])
 
-    def supplier(self):
-        self.root.destroy()
-        subprocess.run(['python', 'supplier.py'])
+    def newprod(self):
+        self.root.focus_force()
+        subprocess.run(['python', 'newprod.py'])
 
 root = Tk()
 obj = supplierClass(root)
