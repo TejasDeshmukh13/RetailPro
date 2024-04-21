@@ -8,16 +8,7 @@ import subprocess
 class supplierClass:
     def __init__(self, root):
         self.root = root
-        # Calculate the new y-position to keep the window centered vertically
-        # Get the screen height
-        # Get the screen height
-        screen_height = self.root.winfo_screenheight()
-
-        # Calculate the new y-position to keep the window centered vertically
-        new_y_position = (screen_height - 750) // 2  # Adjust 750 according to the new height
-
-        # Set the new geometry with the updated y-position
-        self.root.geometry("1150x750+220+{}".format(new_y_position))
+        self.root.geometry("1150x600+220+130")
 
         self.root.title("RETAIL PRO")
         self.root.config(bg="white")

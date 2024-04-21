@@ -9,6 +9,7 @@ class supplierClass:
     def __init__(self, root):
         self.root = root
         self.root.geometry("1150x600+220+130")
+
         self.root.title("RETAIL PRO")
         self.root.config(bg="white")
         self.root.focus_force()

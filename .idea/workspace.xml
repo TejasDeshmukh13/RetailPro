@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="newsupp">
-      <change beforePath="$PROJECT_DIR$/.idea/RetailPro.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RetailPro.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/retailers_supplier.sql" beforeDir="false" afterPath="$PROJECT_DIR$/data/retailers_supplier.sql" afterDir="false" />
+    <list default="true" id="2fb8801b-8d80-4a89-904c-c573e5c37228" name="Changes" comment="supp">
+      <change beforePath="$PROJECT_DIR$/supplier - Copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/supplier - Copy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/supplier.py" beforeDir="false" afterPath="$PROJECT_DIR$/supplier.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -369,7 +365,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713634161213</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="supp">
+      <option name="closed" value="true" />
+      <created>1713708761361</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1713708761361</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -403,6 +407,7 @@
     <MESSAGE value="supplier half done as dropdown" />
     <MESSAGE value="check everthing" />
     <MESSAGE value="new" />
-    <option name="LAST_COMMIT_MESSAGE" value="new" />
+    <MESSAGE value="supp" />
+    <option name="LAST_COMMIT_MESSAGE" value="supp" />
   </component>
 </project>
