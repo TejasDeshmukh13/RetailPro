@@ -25,7 +25,9 @@ DROP TABLE IF EXISTS `supplier`;
 CREATE TABLE `supplier` (
   `transaction_id` int NOT NULL AUTO_INCREMENT,
   `sup_id` int NOT NULL,
+  'mob_no' bigint CHECK (LENGTH(mob_no) = 10),
   `prod_id` int NOT NULL,
+
   `product_name` varchar(255) NOT NULL,
   `purchase_price` decimal(10,2) NOT NULL,
   `quantity_bought` int NOT NULL,

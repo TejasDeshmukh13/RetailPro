@@ -8,7 +8,17 @@ import subprocess
 class supplierClass:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("1150x600+220+130")
+        # Calculate the new y-position to keep the window centered vertically
+        # Get the screen height
+        # Get the screen height
+        screen_height = self.root.winfo_screenheight()
+
+        # Calculate the new y-position to keep the window centered vertically
+        new_y_position = (screen_height - 750) // 2  # Adjust 750 according to the new height
+
+        # Set the new geometry with the updated y-position
+        self.root.geometry("1150x750+220+{}".format(new_y_position))
+
         self.root.title("RETAIL PRO")
         self.root.config(bg="white")
         self.root.focus_force()
@@ -150,11 +160,24 @@ class supplierClass:
         scrolly = Scrollbar(supp_frame, orient=VERTICAL)
         scrollX = Scrollbar(supp_frame, orient=HORIZONTAL)
 
+
+
+
+
+
+
         self.SupplierTable = ttk.Treeview(supp_frame, column=("supid", "smobile", "ppid", "prd_names", "pprice", "qnty", "sprice", "gst", "tprice"), yscrollcommand=scrolly.set, xscrollcommand=scrollX.set)
         scrollX.pack(side=BOTTOM, fill=X)
         scrolly.pack(side=RIGHT, fill=Y)
         scrollX.config(command=self.SupplierTable.xview)
         scrolly.config(command=self.SupplierTable.yview)
+        self.SupplierTable.config(yscrollcommand=scrolly.set)
+        scrolly.config(command=self.SupplierTable.yview)
+        self.SupplierTable.pack(side=LEFT,fill=BOTH, expand=1)
+
+
+
+
         self.SupplierTable.heading("supid", text="Supplier ID")
         self.SupplierTable.heading("smobile", text="Supplier mobile no")
         self.SupplierTable.heading("ppid", text="Product ID")
@@ -168,6 +191,8 @@ class supplierClass:
         self.SupplierTable["show"] = "headings"
         self.SupplierTable.pack(fill=BOTH, expand=1)
         self.update_treeview()
+
+
 
     def get_month_abbreviation(self, month_number):
         month_abbr = {

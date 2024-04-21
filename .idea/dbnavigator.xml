@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DBNavigator.Project.DDLFileAttachmentManager">
+    <mappings />
+    <preferences />
+  </component>
+  <component name="DBNavigator.Project.DataEditorManager">
+    <record-view-column-sorting-type value="BY_INDEX" />
+    <value-preview-text-wrapping value="true" />
+    <value-preview-pinned value="false" />
+  </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="0785a6d6-6bf7-44b3-becf-5b7a41946000">
       <console name="Connection" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
+  <component name="DBNavigator.Project.DatabaseEditorStateManager">
+    <last-used-providers />
+  </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
+  <component name="DBNavigator.Project.DatabaseSessionManager">
+    <connection id="0785a6d6-6bf7-44b3-becf-5b7a41946000" />
+  </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
+  </component>
+  <component name="DBNavigator.Project.FileConnectionMappingManager">
+    <mapping file-url="file://$PROJECT_DIR$/data/retailers_supplier.sql" connection-id="virtual-mysql-connection" session-id="" current-schema="" />
+  </component>
+  <component name="DBNavigator.Project.ObjectQuickFilterManager">
+    <last-used-operator value="EQUAL" />
+    <filters />
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
@@ -77,7 +99,6 @@
           <debugger-type value="JDBC" />
         </debugger>
         <object-filters hide-empty-schemas="false" hide-pseudo-columns="false" hide-audit-columns="false">
-          <object-filters />
           <object-type-filter use-master-settings="true">
             <object-type name="SCHEMA" enabled="true" />
             <object-type name="USER" enabled="true" />
@@ -105,6 +126,7 @@
             <object-type name="CLUSTER" enabled="true" />
             <object-type name="DBLINK" enabled="true" />
           </object-type-filter>
+          <object-name-filters />
         </object-filters>
       </connection>
     </connections>
@@ -498,5 +520,9 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
+    <execution-variable-types />
   </component>
 </project>
