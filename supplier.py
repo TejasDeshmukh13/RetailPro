@@ -396,6 +396,9 @@ class supplierClass:
         self.root.focus_force()
         subprocess.run(['python', 'newprod.py'])
 
+
+
+
 root = Tk()
 obj = supplierClass(root)
 root.mainloop()

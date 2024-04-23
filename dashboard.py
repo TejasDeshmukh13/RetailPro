@@ -112,7 +112,7 @@ class Expentory:
 			cursor="hand2"
 		).place(x=45, y=350)
 
-		Button(width=7, pady=0, text='About Us', bg='light blue', fg='black', border=3,command=self.dashboardcopy,
+		Button(width=7, pady=0, text='About Us', bg='light blue', fg='black', border=3,command=self.aboutus,
 		       font=("times new roman", 15, "bold"),
 		       ).place(x=1135, y=20)
 
@@ -141,9 +141,9 @@ class Expentory:
 		self.root.destroy()
 		subprocess.run(['python', 'reg.py'])
 
-	def dashboardcopy(self):
+	def aboutus(self):
 		self.root.destroy()
-		subprocess.run(['python', 'dashboard.py'])
+		subprocess.run(['python', 'aboutus.py'])
 root = Tk()
 obj = Expentory(root)
 root.mainloop()

@@ -56,9 +56,7 @@ class newsupplierClass :
 		lbl_search = Label(self.root , text = "Search by Product Id." , bg = "white" , font = ("goudy old style" , 15))
 		lbl_search.place(x = 300 , y = 450)
 
-		btn_back = Button(self.root , text = "BACK" , font = ("goudy old style" , 10) , bg = "blue" , fg = "white" ,
-		                  command = self.dashboard , cursor = "hand2")
-		btn_back.place(x = 1050 , y = 20 , width = 80 , height = 25)
+
 
 		btn_search = Button(self.root , text = "Search" , command = self.search_product ,
 		                    font = ("goudy old style" , 15) ,
@@ -350,10 +348,11 @@ class newsupplierClass :
 	def dashboard(self) :
 		self.root.destroy()
 		subprocess.run(['python' , 'dashboard.py'])
+		pass
 
 	def supplier(self) :
 		self.root.destroy()
-		subprocess.run(['python' , 'supplier.py'])
+
 
 
 root = Tk()

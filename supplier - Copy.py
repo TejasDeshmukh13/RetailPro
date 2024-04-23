@@ -259,7 +259,7 @@ class supplierClass:
                 self.db.commit()
             else :
                 # If the product already exists, update its details
-                update_query = "UPDATE inventory SET prd_name = %s, purchase_per_unit = %s, sale_per_unit = %s, stock_quantity = %s, stock_price = %s, GST = %s, low_stk_alert = %s WHERE prd_name = %s"
+                update_query = "UPDATE inventory SET purchase_per_unit = %s, sale_per_unit = %s, stock_quantity = %s, stock_price = %s, GST = %s, low_stk_alert = %s WHERE prd_name = %s"
                 # Fetching initial stock quantity from the inventory
                 query = "SELECT stock_quantity FROM inventory WHERE prd_name = %s"
                 self.cursor.execute(query , (prname ,))
@@ -268,7 +268,7 @@ class supplierClass:
                 total_quantity = initial_stock_quantity + int(qntty)
                 # Calculate new stock price
                 stock_price = total_quantity * float(salepr) + total_quantity * float(salepr) * (int(dpd) / 100)
-                update_values = (prname , pprice , salepr , total_quantity , stock_price , int(dpd) , alrt , prid)
+                update_values = ( pprice , salepr , total_quantity , stock_price , int(dpd) , alrt , prname)
                 self.cursor.execute(update_query , update_values)
                 self.db.commit()
 
@@ -325,13 +325,13 @@ class supplierClass:
             product_name = self.var_prod_names.get()
 
             # Fetching data from the database based on the entered product ID
-            query = "SELECT prod_id, category,purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prd_name = %s"
+            query = "SELECT prod_id, purchase_per_unit, sale_per_unit, stock_quantity, stock_price, GST, low_stk_alert FROM inventory WHERE prd_name = %s"
             self.cursor.execute(query, (product_name,))
             data = self.cursor.fetchone()
 
             if data:
                 # Product ID found in the inventory
-                prod_id,category, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
+                prod_id, purchase_price, sale_price, stock_quantity, stock_price, gst, low_stock_alert = data
 
                 # Update the corresponding text fields with the retrieved data
                 self.var_ppid.set(prod_id)
@@ -353,14 +353,14 @@ class supplierClass:
             supplier_id = self.var_supp_id.get()
 
             # Fetching data from the database based on the entered supplier ID
-            query = "SELECT mobile_no, category FROM supplier_details WHERE sup_id = %s"
+            query = "SELECT mobile_no FROM supplier_details WHERE sup_id = %s"
             self.cursor.execute(query , (supplier_id ,))
             data = self.cursor.fetchone()
 
             if data :
                 # Supplier ID found in the supplier_details table
                 mobile_number = data[0]
-                category = data[1]
+
 
                 # Update the corresponding text field with the retrieved mobile number
                 self.var_mobile.set(mobile_number)

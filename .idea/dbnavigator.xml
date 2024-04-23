@@ -9,6 +9,12 @@
     <value-preview-text-wrapping value="true" />
     <value-preview-pinned value="false" />
   </component>
+  <component name="DBNavigator.Project.DatabaseBrowserManager">
+    <autoscroll-to-editor value="false" />
+    <autoscroll-from-editor value="true" />
+    <show-object-properties value="true" />
+    <loaded-nodes />
+  </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="0785a6d6-6bf7-44b3-becf-5b7a41946000">
       <console name="Connection" type="STANDARD" schema="" session="Main" />
@@ -27,7 +33,7 @@
     <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/data/retailers_supplier.sql" connection-id="virtual-mysql-connection" session-id="" current-schema="" />
+    <mapping file-url="file://$PROJECT_DIR$/data/retailers_supplier.sql" connection-id="virtual-mysql-connection" session-id="MAIN" current-schema="" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
