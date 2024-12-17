@@ -54,18 +54,27 @@ Retailers struggle to efficiently monitor both expenses and inventory, leading t
   
 ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/WhatsApp%20Image%202024-12-17%20at%2017.00.30_d7f29b3f.jpg)
 
-  1. Customer Details Page
+1. Customer Details Page
+   
      ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture1.jpg)
+   
 
-  2. Supplier Details Page
+2. Supplier Details Page
+   
      ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture2.png)
+   
 
-  3. Inventory Details Page
+3. Inventory Details Page
+     
      ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture3.jpg)I
      
-  4. Product Status Page
+     
+4. Product Status Page
+     
      ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture4.jpg)
      
-  5. Sales Details Page
+     
+5. Sales Details Page
+    
      ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture5.jpg)
    
