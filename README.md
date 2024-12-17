@@ -11,9 +11,6 @@ Retailers often face challenges in managing expenses and inventory simultaneousl
 - 💰 **Expense Tracking**: Efficiently record and categorize transactions.  
 - 🖥️ **User-Friendly GUI**: Tkinter-based interface for easy navigation.  
 
-### **Motivation**  
-Existing tools often lack the ability to integrate inventory and expense tracking efficiently. Observing these gaps, RetailPro was designed to help retailers streamline operations with minimal effort.  
-
 ---
 
 ## 🎯 **Objectives**  
@@ -52,6 +49,7 @@ Retailers struggle to efficiently monitor both expenses and inventory, leading t
 ---
 
 ## 📂 **Implementation Features**  
+
 1️⃣ **Dashboard**: View inventory and transaction summaries.  
 2️⃣ **Expense Tracker**: Add, edit, and categorize expenses.  
 3️⃣ **Inventory Manager**: Update stock levels and receive low-stock alerts.  
