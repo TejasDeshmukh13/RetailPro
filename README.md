@@ -50,25 +50,22 @@ Retailers struggle to efficiently monitor both expenses and inventory, leading t
 
 ## 📂 **Implementation Features**  
 
-1️⃣ **Dashboard**: View inventory and transaction summaries.  
-2️⃣ **Expense Tracker**: Add, edit, and categorize expenses.  
-3️⃣ **Inventory Manager**: Update stock levels and receive low-stock alerts.  
-4️⃣ **Profit/Loss Analysis**: Graph-based insights for better financial decisions.  
-5️⃣ **Supplier Transactions**: Log and review supplier interactions.  
+- System Architecture
+  
+![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/WhatsApp%20Image%202024-12-17%20at%2017.00.30_d7f29b3f.jpg)
 
----
+  1. Customer Details Page
+     ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture1.jpg)
 
-## 📝 **Conclusion**  
-RetailPro simplifies store operations by addressing common challenges like financial tracking and inventory management. With an intuitive interface and powerful features, it empowers retailers to make informed decisions and run their businesses efficiently.  
+  2. Supplier Details Page
+     ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture2.png)
 
----
-
-## 📜 **References**  
-1. Chandini, S., et al. "Online Income and Expense Tracker." *IRJET* 6.3 (2019): 2395-0056.  
-2. Gupta, Hrithik, et al. "Expense Tracker: A Smart Approach to Track Everyday Expense." *EasyChair Preprint 4809* (2020).  
-3. Macas, Cinthya Vanessa Muñoz, et al. "Inventory management for retail companies: A literature review and current trends." *IEEE ICI2ST Conference* (2021).  
-
----
-
-## 🚀 **License**  
-This project is licensed under the **MIT License**. See the LICENSE file for more details.  
+  3. Inventory Details Page
+     ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture3.jpg)I
+     
+  4. Product Status Page
+     ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture4.jpg)
+     
+  5. Sales Details Page
+     ![image alt](https://github.com/TejasDeshmukh13/RetailPro/blob/273042c0235a06141c765ad0cd39fa17f7b872e5/retail_demo/Picture5.jpg)
+   
